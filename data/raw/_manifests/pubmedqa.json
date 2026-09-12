@@ -1,0 +1,11 @@
+{
+  "archive_sha256": "887301d2e53eb4dc4a6138cf20b7c29035ea651f93080a3766ca23410d554bce",
+  "counts": {
+    "pqa_l_records": 1000
+  },
+  "dataset": "pubmedqa",
+  "downloaded_at_utc": "2026-09-12T23:26:47.377255+00:00",
+  "kind": "public_real",
+  "revision": "1cbae8e92f72f20c8d3747cbb3bf5bc53554d997",
+  "source_url": "https://github.com/pubmedqa/pubmedqa/archive/1cbae8e92f72f20c8d3747cbb3bf5bc53554d997.zip"
+}

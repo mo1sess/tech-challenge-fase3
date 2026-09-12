@@ -1,0 +1,29 @@
+{
+  "archive_sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+  "counts": {
+    "allergies": 105,
+    "careplans": 349,
+    "claims": 9421,
+    "claims_transactions": 85047,
+    "conditions": 3517,
+    "csv_files": 18,
+    "devices": 524,
+    "encounters": 5571,
+    "imaging_studies": 478,
+    "immunizations": 1549,
+    "medications": 3850,
+    "observations": 68648,
+    "organizations": 278,
+    "patients": 108,
+    "payer_transitions": 3815,
+    "payers": 10,
+    "procedures": 15884,
+    "providers": 278,
+    "supplies": 2225
+  },
+  "dataset": "synthea",
+  "downloaded_at_utc": "2026-09-12T23:26:49.808790+00:00",
+  "kind": "synthetic_public",
+  "revision": "latest-sample-csv; immutable content recorded by SHA-256 manifest",
+  "source_url": "https://synthetichealth.github.io/synthea-sample-data/downloads/latest/synthea_sample_data_csv_latest.zip"
+}

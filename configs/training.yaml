@@ -1,0 +1,15 @@
+# Configuration contract for the future training stage. No training is implemented now.
+model:
+  official_id: "Qwen/Qwen3-8B"
+  allow_silent_model_substitution: false
+
+execution:
+  preferred: "google_colab"
+  alternative: "kaggle"
+  local_full_finetuning_allowed: false
+  local_gpu: "NVIDIA GeForce GTX 1650 4 GB"
+
+reproducibility:
+  seed: 42
+  separate_base_model_and_adapter: true
+

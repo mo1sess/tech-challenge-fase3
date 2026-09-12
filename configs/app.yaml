@@ -1,0 +1,12 @@
+project:
+  name: "Assistente Clinico TechCare"
+  stage: "0-1"
+  locale: "pt-BR"
+  disclaimer: >-
+    Este sistema e um prototipo academico e nao deve ser utilizado para
+    diagnostico, prescricao ou tomada autonoma de decisoes clinicas.
+
+paths:
+  data_root: "data"
+  outputs_root: "outputs"
+

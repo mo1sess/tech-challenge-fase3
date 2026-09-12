@@ -1,0 +1,12 @@
+{
+  "archive_sha256": "161d948f8ce8f82accca1f5769a512dff2a01af2b3004d48f2b3da2758a38a09",
+  "counts": {
+    "qa_pairs": 47441,
+    "xml_files": 11274
+  },
+  "dataset": "medquad",
+  "downloaded_at_utc": "2026-09-12T23:26:45.723844+00:00",
+  "kind": "public_real",
+  "revision": "577bd37b96c02d1833b2c9eed2de9f96964e96cb",
+  "source_url": "https://github.com/abachaa/MedQuAD/archive/577bd37b96c02d1833b2c9eed2de9f96964e96cb.zip"
+}

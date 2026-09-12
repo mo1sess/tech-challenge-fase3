@@ -1,0 +1,38 @@
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.pytest-tmp/
+.coverage
+htmlcov/
+.env
+.idea/
+.vscode/
+.DS_Store
+
+# Raw datasets are reproducible through scripts and manifests.
+data/raw/medquad/*
+data/raw/pubmedqa/*
+data/raw/synthea/*
+data/raw/protocols/*
+!data/raw/medquad/.gitkeep
+!data/raw/pubmedqa/.gitkeep
+!data/raw/synthea/.gitkeep
+!data/raw/protocols/.gitkeep
+!data/raw/_manifests/*.json
+
+# User-provided protocols and generated outputs must not be committed by default.
+data/inbox/protocols/*
+!data/inbox/protocols/README.md
+outputs/**
+!outputs/**/.gitkeep
+
+# Model artifacts and caches.
+*.safetensors
+*.ckpt
+*.pt
+*.pth
+adapter_model*/
+.cache/
+wandb/

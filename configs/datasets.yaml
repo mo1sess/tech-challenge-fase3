@@ -1,0 +1,27 @@
+schema_version: 1
+datasets:
+  medquad:
+    kind: "public_real"
+    url: "https://github.com/abachaa/MedQuAD/archive/577bd37b96c02d1833b2c9eed2de9f96964e96cb.zip"
+    revision: "577bd37b96c02d1833b2c9eed2de9f96964e96cb"
+    destination: "data/raw/medquad"
+    license_note: "See the licenses/readme files distributed with the source dataset."
+  pubmedqa:
+    kind: "public_real"
+    url: "https://github.com/pubmedqa/pubmedqa/archive/1cbae8e92f72f20c8d3747cbb3bf5bc53554d997.zip"
+    revision: "1cbae8e92f72f20c8d3747cbb3bf5bc53554d997"
+    destination: "data/raw/pubmedqa"
+    subset: "PQA-L"
+    license_note: "MIT license in the official repository."
+  synthea:
+    kind: "synthetic_public"
+    url: "https://synthetichealth.github.io/synthea-sample-data/downloads/latest/synthea_sample_data_csv_latest.zip"
+    revision: "latest-sample-csv; immutable content recorded by SHA-256 manifest"
+    destination: "data/raw/synthea"
+    license_note: "Synthetic data made available by the MITRE Synthea project."
+  protocols:
+    kind: "local_or_public"
+    inbox: "data/inbox/protocols"
+    destination: "data/raw/protocols"
+    allowed_extensions: [".pdf", ".txt", ".md"]
+
