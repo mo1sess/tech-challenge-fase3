@@ -25,6 +25,9 @@ data/raw/protocols/*
 # User-provided protocols and generated outputs must not be committed by default.
 data/inbox/protocols/*
 !data/inbox/protocols/README.md
+data/processed/*
+!data/processed/.gitkeep
+!data/processed/preprocessing_manifest.json
 outputs/**
 !outputs/**/.gitkeep
 

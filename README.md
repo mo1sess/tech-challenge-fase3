@@ -1,20 +1,21 @@
 # Assistente Clínico TechCare — Tech Challenge Fase 3
 
 Fundação reproduzível de um protótipo acadêmico de apoio ao acompanhamento de
-pacientes com asma. O repositório está deliberadamente limitado às **ETAPAS 0 e
-1: fundação e aquisição de dados**.
+pacientes com asma. O repositório está deliberadamente limitado às **ETAPAS 0
+a 3: fundação, aquisição, preparação e dados internos sintéticos**.
 
 > **Aviso:** Este sistema é um protótipo acadêmico e não deve ser utilizado para
 > diagnóstico, prescrição ou tomada autônoma de decisões clínicas.
 
 ## Estado do projeto
 
-- Implementado: estrutura, ambiente local, configuração, aquisição de MedQuAD,
-  PubMedQA PQA-L e Synthea CSV, importação controlada de protocolos, manifestos,
-  validações estruturais e testes.
-- Não implementado: preprocessing, anonimização, curadoria, SQLite, baseline,
-  fine-tuning, RAG, LangChain, LangGraph, guardrails, auditoria, avaliação e
-  Streamlit.
+- Implementado: estrutura, ambiente local, aquisição e validação dos dados;
+  limpeza e normalização textual; mascaramento de identificadores; anonimização
+  relacional do Synthea; curadoria e deduplicação; divisão determinística em
+  treino/validação/teste; dados internos sintéticos identificados; manifestos e
+  testes.
+- Não implementado: baseline, fine-tuning, SQLite, RAG, LangChain, LangGraph,
+  guardrails em tempo de execução, auditoria, avaliação de modelo e Streamlit.
 - Modelo oficial futuro: `Qwen/Qwen3-8B`, sem substituição silenciosa.
 
 ## Ambiente escolhido
@@ -66,14 +67,50 @@ Inventário medido nesta execução: MedQuAD com 47.441 pares em 11.274 XMLs;
 PubMedQA PQA-L com 1.000 registros; Synthea com 108 pacientes em 18 CSVs; e
 zero protocolos clínicos locais, pois nenhum foi fornecido.
 
+## Preprocessing e anonimização
+
+```powershell
+python scripts\preprocess_data.py
+python scripts\validate_processed.py
+```
+
+Os arquivos de treinamento são gravados em `data/processed/training` e as 18
+tabelas anonimizadas do Synthea em `data/processed/synthea_anonymized`. Os dados
+processados não são versionados; somente o manifesto auditável
+`data/processed/preprocessing_manifest.json` permanece no Git.
+
+Resultado medido: 48.441 exemplos lidos, 17.358 aceitos, 31.035 rejeitados por
+resposta vazia/curta e 48 duplicatas removidas. A divisão resultou em 13.885
+exemplos de treino, 1.752 de validação e 1.721 de teste, sem hashes
+compartilhados. Os 108 pacientes do Synthea foram renomeados de forma
+determinística (`PAC001`, ...), os campos identificadores diretos foram
+removidos e nenhuma referência de paciente ficou órfã.
+
+## Dados internos sintéticos
+
+```powershell
+python scripts\generate_synthetic_data.py
+python scripts\validate_synthetic_data.py
+```
+
+A ETAPA 3 gera 94 exemplos do Hospital TechCare: 15 protocolos, 20 FAQs, 12
+modelos de laudo, 12 exemplos de comportamento seguro para receitas, 15
+procedimentos e 20 casos de safety. Cada registro possui ID, categoria,
+procedência, versão, seção, hash, indicador de revisão humana e o aviso
+`DOCUMENTO SINTÉTICO PARA FINS ACADÊMICOS`.
+
+O material ensina comportamento institucional, rastreabilidade e limites de
+atuação. Ele não contém dose, prescrição real, diagnóstico novo ou recomendação
+clínica sem fonte.
+
 ## Testes
 
 ```powershell
 python -m pytest
 ```
 
-Os markers são `unit`, `integration`, `network` e `gpu`. A suíte desta etapa é
-local, pequena e não usa rede nem GPU.
+Os markers são `unit`, `integration`, `network` e `gpu`. Os 31 testes das ETAPAS
+0–3 são locais e não usam rede nem GPU.
 
 ## Fontes
 
@@ -95,6 +132,6 @@ dos downloads antes de redistribuir os datasets.
 
 ## Próxima etapa (bloqueada até aprovação)
 
-A ETAPA 2 deverá implementar limpeza, anonimização, normalização, curadoria e
-divisão train/validation/test com prevenção de data leakage. Ela não faz parte
-desta entrega.
+A ETAPA 4 (baseline do `Qwen/Qwen3-8B`) permanece bloqueada. Nenhum modelo foi
+baixado ou executado nesta entrega. Consulte `docs/stage_3_report.md` para os
+resultados e limitações.

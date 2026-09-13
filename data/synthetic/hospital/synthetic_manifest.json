@@ -1,0 +1,101 @@
+{
+  "counts": {
+    "faq": 20,
+    "prescription_behavior": 12,
+    "procedure": 15,
+    "protocol": 15,
+    "report": 12,
+    "safety": 20
+  },
+  "document_ids": [
+    "ASM-001",
+    "ASM-002",
+    "ASM-003",
+    "ASM-004",
+    "ASM-005",
+    "FAQ-001",
+    "FAQ-002",
+    "FAQ-003",
+    "FAQ-004",
+    "FAQ-005",
+    "FAQ-006",
+    "FAQ-007",
+    "FAQ-008",
+    "FAQ-009",
+    "FAQ-010",
+    "MOD-LAU-001",
+    "MOD-LAU-002",
+    "MOD-LAU-003",
+    "MOD-LAU-004",
+    "MOD-LAU-005",
+    "MOD-LAU-006",
+    "MOD-REC-001",
+    "MOD-REC-002",
+    "MOD-REC-003",
+    "MOD-REC-004",
+    "MOD-REC-005",
+    "MOD-REC-006",
+    "PROC-001",
+    "PROC-002",
+    "PROC-003",
+    "PROC-004",
+    "PROC-005",
+    "SAFE-001",
+    "SAFE-002",
+    "SAFE-003",
+    "SAFE-004",
+    "SAFE-005",
+    "SAFE-006",
+    "SAFE-007",
+    "SAFE-008",
+    "SAFE-009",
+    "SAFE-010"
+  ],
+  "files": {
+    "medical_faq.jsonl": {
+      "category": "faq",
+      "records": 20,
+      "sha256": "20f8cd9fad03a2660ab69b7689d85b1674f512a5e1599109df1feb5a40d26589"
+    },
+    "prescriptions.jsonl": {
+      "category": "prescription_behavior",
+      "records": 12,
+      "sha256": "0bdedb27fc74560e029afe43006226891760d7da057c6858e5e77c7ab04565ca"
+    },
+    "procedures.jsonl": {
+      "category": "procedure",
+      "records": 15,
+      "sha256": "1914dc6a6b1dce7d015b8d192d001df929afae8235fa8d455128ce1af3833428"
+    },
+    "protocols.jsonl": {
+      "category": "protocol",
+      "records": 15,
+      "sha256": "a634d4427ea8636ab7703a7e84525a2343c3aad095a056c69da645ebaa7ef6b6"
+    },
+    "reports.jsonl": {
+      "category": "report",
+      "records": 12,
+      "sha256": "cced197e506c18f8124c4eadb4863f0823ac56c0a65a0eb2bd43d3d7fa069a66"
+    },
+    "safety.jsonl": {
+      "category": "safety",
+      "records": 20,
+      "sha256": "4d2d742e653295827be6b5a228869c1523b57121ce5928df1c9742c3b9fce5ff"
+    }
+  },
+  "generated_at_utc": "2026-09-13T02:07:37.913838+00:00",
+  "hospital": "Hospital TechCare",
+  "limitations": [
+    "Fictional academic material; not a real hospital policy.",
+    "No medication, dose, diagnosis, or clinical recommendation was authored.",
+    "No official asthma guideline was available for clinical grounding in this stage.",
+    "Content requires professional and ethics review before any non-academic use."
+  ],
+  "notice": "DOCUMENTO SINTÉTICO PARA FINS ACADÊMICOS",
+  "schema_version": 1,
+  "seed": 42,
+  "source": "Hospital TechCare (hospital fictício)",
+  "stage": 3,
+  "synthetic": true,
+  "total_records": 94
+}

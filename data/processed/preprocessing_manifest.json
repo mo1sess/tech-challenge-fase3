@@ -1,0 +1,192 @@
+{
+  "configuration": {
+    "outputs": {
+      "manifest": "data/processed/preprocessing_manifest.json",
+      "synthea_directory": "data/processed/synthea_anonymized",
+      "training_directory": "data/processed/training"
+    },
+    "schema_version": 1,
+    "split": {
+      "algorithm": "sha256_content_hash_v1",
+      "test_percent": 10,
+      "train_percent": 80,
+      "validation_percent": 10
+    },
+    "synthea": {
+      "patient_prefix": "PAC",
+      "safe_patient_columns": [
+        "Id",
+        "BIRTH_YEAR",
+        "DEATH_YEAR",
+        "MARITAL",
+        "RACE",
+        "ETHNICITY",
+        "GENDER",
+        "STATE",
+        "COUNTY",
+        "HEALTHCARE_EXPENSES",
+        "HEALTHCARE_COVERAGE",
+        "INCOME"
+      ]
+    },
+    "text": {
+      "min_instruction_chars": 8,
+      "min_output_chars": 8
+    }
+  },
+  "curation": {
+    "accepted": 17358,
+    "rejected_duplicate": 48,
+    "rejected_short_instruction": 0,
+    "rejected_short_output": 31035,
+    "seen": 48441
+  },
+  "generated_at_utc": "2026-09-13T01:22:56.157357+00:00",
+  "leakage_check": {
+    "ok": true,
+    "shared_content_hashes": 0
+  },
+  "limitations": [
+    "Structural curation does not constitute clinical validation.",
+    "MedQuAD and PubMedQA content is predominantly English.",
+    "No local clinical protocols were available in this stage.",
+    "Synthea records are synthetic but were anonymized to demonstrate the control."
+  ],
+  "raw_counts": {
+    "medquad_examples": 47441,
+    "pubmedqa_examples": 1000
+  },
+  "raw_manifests": {
+    "medquad": {
+      "archive_sha256": "161d948f8ce8f82accca1f5769a512dff2a01af2b3004d48f2b3da2758a38a09",
+      "counts": {
+        "qa_pairs": 47441,
+        "xml_files": 11274
+      },
+      "dataset": "medquad",
+      "downloaded_at_utc": "2026-09-12T23:26:45.723844+00:00",
+      "kind": "public_real",
+      "revision": "577bd37b96c02d1833b2c9eed2de9f96964e96cb",
+      "source_url": "https://github.com/abachaa/MedQuAD/archive/577bd37b96c02d1833b2c9eed2de9f96964e96cb.zip"
+    },
+    "protocols": {
+      "counts": {
+        "imported_files": 0,
+        "rejected_files": 0
+      },
+      "dataset": "protocols",
+      "files": [],
+      "imported_at_utc": "2026-09-12T23:26:49.812209+00:00",
+      "kind": "local_or_public",
+      "rejected": []
+    },
+    "pubmedqa": {
+      "archive_sha256": "887301d2e53eb4dc4a6138cf20b7c29035ea651f93080a3766ca23410d554bce",
+      "counts": {
+        "pqa_l_records": 1000
+      },
+      "dataset": "pubmedqa",
+      "downloaded_at_utc": "2026-09-12T23:26:47.377255+00:00",
+      "kind": "public_real",
+      "revision": "1cbae8e92f72f20c8d3747cbb3bf5bc53554d997",
+      "source_url": "https://github.com/pubmedqa/pubmedqa/archive/1cbae8e92f72f20c8d3747cbb3bf5bc53554d997.zip"
+    },
+    "synthea": {
+      "archive_sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+      "counts": {
+        "allergies": 105,
+        "careplans": 349,
+        "claims": 9421,
+        "claims_transactions": 85047,
+        "conditions": 3517,
+        "csv_files": 18,
+        "devices": 524,
+        "encounters": 5571,
+        "imaging_studies": 478,
+        "immunizations": 1549,
+        "medications": 3850,
+        "observations": 68648,
+        "organizations": 278,
+        "patients": 108,
+        "payer_transitions": 3815,
+        "payers": 10,
+        "procedures": 15884,
+        "providers": 278,
+        "supplies": 2225
+      },
+      "dataset": "synthea",
+      "downloaded_at_utc": "2026-09-12T23:26:49.808790+00:00",
+      "kind": "synthetic_public",
+      "revision": "latest-sample-csv; immutable content recorded by SHA-256 manifest",
+      "source_url": "https://synthetichealth.github.io/synthea-sample-data/downloads/latest/synthea_sample_data_csv_latest.zip"
+    }
+  },
+  "schema_version": 1,
+  "splits": {
+    "test": {
+      "records": 1721,
+      "sources": {
+        "MedQuAD": 1635,
+        "PubMedQA/PQA-L": 86
+      }
+    },
+    "train": {
+      "records": 13885,
+      "sources": {
+        "MedQuAD": 13066,
+        "PubMedQA/PQA-L": 819
+      }
+    },
+    "validation": {
+      "records": 1752,
+      "sources": {
+        "MedQuAD": 1657,
+        "PubMedQA/PQA-L": 95
+      }
+    }
+  },
+  "stage": 2,
+  "synthea_anonymization": {
+    "direct_identifiers_removed": [
+      "SSN",
+      "DRIVERS",
+      "PASSPORT",
+      "PREFIX",
+      "FIRST",
+      "MIDDLE",
+      "LAST",
+      "SUFFIX",
+      "MAIDEN",
+      "BIRTHPLACE",
+      "ADDRESS",
+      "CITY",
+      "FIPS",
+      "ZIP",
+      "LAT",
+      "LON"
+    ],
+    "patient_prefix": "PAC",
+    "patients": 108,
+    "table_counts": {
+      "allergies": 105,
+      "careplans": 349,
+      "claims": 9421,
+      "claims_transactions": 85047,
+      "conditions": 3517,
+      "devices": 524,
+      "encounters": 5571,
+      "imaging_studies": 478,
+      "immunizations": 1549,
+      "medications": 3850,
+      "observations": 68648,
+      "organizations": 278,
+      "patients": 108,
+      "payer_transitions": 3815,
+      "payers": 10,
+      "procedures": 15884,
+      "providers": 278,
+      "supplies": 2225
+    },
+    "tables": 18
+  }
+}

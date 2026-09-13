@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "tech-challenge-fase3"
 version = "0.1.0"
-description = "Fundacao e aquisicao de dados do Assistente Clinico TechCare."
+description = "Fundacao, aquisicao e preparacao de dados do Assistente Clinico TechCare."
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
 dependencies = ["PyYAML==6.0.3"]

@@ -1,0 +1,33 @@
+schema_version: 1
+
+text:
+  min_instruction_chars: 8
+  min_output_chars: 8
+
+split:
+  train_percent: 80
+  validation_percent: 10
+  test_percent: 10
+  algorithm: "sha256_content_hash_v1"
+
+outputs:
+  training_directory: "data/processed/training"
+  synthea_directory: "data/processed/synthea_anonymized"
+  manifest: "data/processed/preprocessing_manifest.json"
+
+synthea:
+  patient_prefix: "PAC"
+  safe_patient_columns:
+    - Id
+    - BIRTH_YEAR
+    - DEATH_YEAR
+    - MARITAL
+    - RACE
+    - ETHNICITY
+    - GENDER
+    - STATE
+    - COUNTY
+    - HEALTHCARE_EXPENSES
+    - HEALTHCARE_COVERAGE
+    - INCOME
+

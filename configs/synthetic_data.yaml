@@ -1,0 +1,22 @@
+schema_version: 1
+seed: 42
+hospital_name: "Hospital TechCare"
+source: "Hospital TechCare (hospital fictício)"
+notice: "DOCUMENTO SINTÉTICO PARA FINS ACADÊMICOS"
+output_directory: "data/synthetic/hospital"
+manifest: "data/synthetic/hospital/synthetic_manifest.json"
+
+expected_counts:
+  protocol: 15
+  faq: 20
+  report: 12
+  prescription_behavior: 12
+  procedure: 15
+  safety: 20
+
+required_protocols:
+  - ASM-001
+  - ASM-002
+  - ASM-003
+  - ASM-004
+  - ASM-005
