@@ -109,3 +109,15 @@ fica fora do Git.
 Este corpus é inteiramente fictício e operacional. Ele permite testar ingestão,
 retrieval e explainability, mas não substitui PCDT, diretriz pública revisada ou
 validação médica. Nenhum protocolo clínico oficial foi fornecido até esta etapa.
+
+## Banco estruturado da ETAPA 7
+
+O SQLite importa as tabelas anonimizadas `patients`, `encounters`, `conditions`,
+`observations`, `medications`, `procedures` e `allergies`, preservando as
+contagens do manifesto da ETAPA 2. A tabela adicional `pending_exams` possui
+quatro solicitações fictícias vinculadas a pacientes pseudonimizados e marcadas
+como sintéticas. Ela não é produzida por inferência de dados ausentes.
+
+O arquivo do banco é reconstruível e não fica no Git. Seu manifesto versionado
+registra hash SHA-256, contagens e confirmação de que identificadores diretos
+não foram importados.

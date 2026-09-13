@@ -1,0 +1,49 @@
+{
+  "complete": true,
+  "database": {
+    "bytes": 35520512,
+    "path": "data/database/techcare.db",
+    "sha256": "4ca933a1c07c12c9b31100d69a79002acc1e38ec841bdc02339a5c5765a8f8ba",
+    "sqlite_schema_version": 1
+  },
+  "generated_at_utc": "2026-09-13T19:25:39.768194+00:00",
+  "limitations": [
+    "Todos os prontuários são sintéticos e não representam pessoas reais.",
+    "Pendências são registros acadêmicos explícitos; não são inferidas pela ausência de resultado.",
+    "As consultas apoiam demonstração técnica e não autorizam decisão clínica."
+  ],
+  "safety": {
+    "arbitrary_sql_allowed": false,
+    "direct_identifiers_imported": false,
+    "patient_identifier": "pseudonymized PACnnn",
+    "repository_read_only": true
+  },
+  "schema_version": 1,
+  "sources": {
+    "anonymized": true,
+    "files_sha256": {
+      "allergies.csv": "ce2784b428e6abbf6de66c663430feef1c73bed7b00ebb1fe26940df90ff5033",
+      "conditions.csv": "a4d0198186159aac0d98ee964c995b64a5b5ca84a17c7e7bacd63c05ca80f852",
+      "encounters.csv": "b5acdec79261db15bf47efb6e890e60a81245999eb88437da0877e39a04da1e9",
+      "medications.csv": "c9ce04d89c0044c61b84975a322fb6f5264bcb30068eb3471c94d29a089b1f60",
+      "observations.csv": "a20a9e089a7cdaeb097687403744d675841352f3b9d7ceefe26678cfdcd8f3ef",
+      "patients.csv": "184568386cda62244ffddb537aa3b95a3ad5e5b316bc0c54f351aefe9b7c2972",
+      "pending_exams.jsonl": "c0a937687dd0c1824ce88313828a37bcabba3494ecf7a8bdd4fc4a65482c059b",
+      "procedures.csv": "144bc2d9239eabf37ba3ed7ff36ef7122810e36e89f892525b9c3c858465dbc8"
+    },
+    "pending_exams_file": "data/synthetic/hospital/pending_exams.jsonl",
+    "synthea_directory": "data/processed/synthea_anonymized",
+    "synthetic": true
+  },
+  "stage": 7,
+  "table_counts": {
+    "allergies": 105,
+    "conditions": 3517,
+    "encounters": 5571,
+    "medications": 3850,
+    "observations": 68648,
+    "patients": 108,
+    "pending_exams": 4,
+    "procedures": 15884
+  }
+}

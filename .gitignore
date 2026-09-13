@@ -31,6 +31,8 @@ data/processed/*
 !data/processed/rag/
 !data/processed/rag/protocol_chunks.jsonl
 data/vectorstore/
+data/database/*.db
+data/database/*.db-*
 outputs/**
 !outputs/**/.gitkeep
 !outputs/baseline/
@@ -46,6 +48,8 @@ outputs/**
 !outputs/training/**/adapter_config.json
 !outputs/rag/
 !outputs/rag/index_manifest.json
+!outputs/database/
+!outputs/database/database_manifest.json
 
 # Model artifacts and caches.
 *.safetensors

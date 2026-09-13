@@ -65,6 +65,8 @@ def _training_instructions(root: Path) -> tuple[set[str], list[str]]:
             checked.append(path.relative_to(root).as_posix())
             with path.open("r", encoding="utf-8") as stream:
                 for line in stream:
+                    if not line.strip():
+                        continue
                     item = json.loads(line)
                     instruction = item.get("instruction")
                     if instruction:

@@ -1,0 +1,54 @@
+schema_version: 1
+stage: 7
+
+source:
+  synthea_directory: "data/processed/synthea_anonymized"
+  pending_exams_file: "data/synthetic/hospital/pending_exams.jsonl"
+  preprocessing_manifest: "data/processed/preprocessing_manifest.json"
+
+database:
+  path: "data/database/techcare.db"
+  manifest: "outputs/database/database_manifest.json"
+  journal_mode: "DELETE"
+  patient_id_pattern: "^PAC[0-9]{3,}$"
+  default_result_limit: 20
+  maximum_result_limit: 100
+
+expected_counts:
+  patients: 108
+  encounters: 5571
+  conditions: 3517
+  observations: 68648
+  medications: 3850
+  procedures: 15884
+  allergies: 105
+  pending_exams: 4
+
+required_tables:
+  - patients
+  - encounters
+  - conditions
+  - observations
+  - medications
+  - procedures
+  - allergies
+  - pending_exams
+  - metadata
+
+safety:
+  repository_read_only: true
+  allow_arbitrary_sql: false
+  direct_identifiers_forbidden:
+    - ssn
+    - drivers
+    - passport
+    - first
+    - middle
+    - last
+    - maiden
+    - address
+    - city
+    - zip
+    - lat
+    - lon
+

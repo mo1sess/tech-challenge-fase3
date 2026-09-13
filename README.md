@@ -2,7 +2,7 @@
 
 Fundação reproduzível de um protótipo acadêmico de apoio ao acompanhamento de
 pacientes com asma. O repositório está deliberadamente limitado às **ETAPAS 0
-a 6: fundação, dados, baseline, fine-tuning QLoRA e RAG local**.
+a 7: fundação, dados, baseline, fine-tuning QLoRA, RAG local e SQLite**.
 
 > **Aviso:** Este sistema é um protótipo acadêmico e não deve ser utilizado para
 > diagnóstico, prescrição ou tomada autônoma de decisões clínicas.
@@ -21,7 +21,9 @@ a 6: fundação, dados, baseline, fine-tuning QLoRA e RAG local**.
   estratificado, validação, adapter separado, métricas, logs e hashes.
 - Implementado localmente: ingestão deduplicada de protocolos sintéticos,
   embeddings multilíngues em CPU, ChromaDB persistente, retrieval e citações.
-- Não implementado: SQLite, LangChain, LangGraph, guardrails em tempo de
+- Implementado localmente: banco SQLite reproduzível com prontuários sintéticos
+  pseudonimizados, repositório somente leitura e ferramentas controladas.
+- Não implementado: LangChain, LangGraph, guardrails em tempo de
   execução, auditoria integrada, comparação de modelos e Streamlit.
 - Modelo oficial: `Qwen/Qwen3-8B`, sem substituição silenciosa.
 
@@ -183,15 +185,40 @@ Cada resultado inclui distância, relevância, trecho e citação. A coleção l
 fica em `data/vectorstore/chroma` e não é versionada; os chunks e o manifesto
 com hashes ficam no Git. Consulte `docs/stage_6_rag.md`.
 
+## SQLite e ferramentas de paciente
+
+Construa e valide o banco da ETAPA 7 localmente:
+
+```powershell
+python scripts\build_patient_database.py
+python scripts\validate_patient_database.py
+```
+
+O banco reúne os 108 pacientes pseudonimizados e as tabelas clínicas
+anonimizadas do Synthea. Quatro pendências de exame foram adicionadas como
+dados explicitamente fictícios; nenhuma pendência é inferida pela ausência de
+resultado. O arquivo `data/database/techcare.db` não é versionado, enquanto seu
+manifesto auditável permanece no Git.
+
+Consulta controlada de demonstração:
+
+```powershell
+python scripts\query_patient.py PAC004 summary
+python scripts\query_patient.py PAC004 pending-exams
+```
+
+As consultas são fixas, parametrizadas e somente leitura. Não existe ferramenta
+para SQL arbitrário. Consulte `docs/stage_7_database.md`.
+
 ## Testes
 
 ```powershell
 python -m pytest
 ```
 
-Os markers são `unit`, `integration`, `network` e `gpu`. Nesta entrega, os 57
-testes passaram em 68,23 segundos no Windows. Eles não usam GPU; somente a
-instalação inicial do modelo de embeddings requer rede.
+Os markers são `unit`, `integration`, `network` e `gpu`. Nesta entrega, os 69
+testes passaram em 18,49 segundos no Windows. Os testes locais não usam GPU;
+somente a instalação inicial do modelo de embeddings requer rede.
 
 ## Fontes
 
@@ -213,6 +240,6 @@ dos downloads antes de redistribuir os datasets.
 
 ## Próxima etapa (aguardando aprovação)
 
-A ETAPA 6 produz uma base RAG local com citações e validação independente. A
-ETAPA 7 (SQLite e ferramentas de paciente) não será iniciada sem nova aprovação
+A ETAPA 7 produz o banco SQLite e ferramentas controladas de paciente. A
+integração com LangChain/LangGraph não será iniciada sem nova aprovação
 explícita.

@@ -1,4 +1,4 @@
-# Arquitetura até a ETAPA 6
+# Arquitetura até a ETAPA 7
 
 As ETAPAS 0 e 1 contêm fundação, configuração, aquisição, inventário e
 validação estrutural. A ETAPA 2 acrescenta um fluxo local e reproduzível:
@@ -76,3 +76,20 @@ Os vetores são informados explicitamente ao Chroma, mantendo o modelo de
 embedding desacoplado do banco. O manifesto registra hashes, revisão imutável do
 modelo, dimensão e contagens. A coleção pode ser reconstruída integralmente a
 partir dos arquivos versionados.
+
+A ETAPA 7 acrescenta uma camada estruturada independente do RAG e da LLM:
+
+```text
+data/processed/synthea_anonymized/*.csv
+  + data/synthetic/hospital/pending_exams.jsonl
+  -> importação determinística + integridade referencial
+  -> data/database/techcare.db
+  -> PatientRepository (SQL fixo, parametrizado e somente leitura)
+  -> PatientService (origem + aviso de segurança)
+  -> PatientTools (operações nomeadas e limitadas)
+```
+
+O banco não contém nome, documento, endereço ou coordenadas. O agente futuro
+não receberá uma ferramenta de SQL genérico: somente consultas predefinidas de
+paciente, condições, medicamentos, observações e exames pendentes. O manifesto
+versionado permite confirmar hash, contagens e versão do esquema.

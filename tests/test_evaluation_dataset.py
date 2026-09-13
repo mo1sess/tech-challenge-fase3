@@ -64,3 +64,14 @@ def test_validator_detects_duplicate_question(tmp_path: Path) -> None:
     report = validate_evaluation_dataset(root)
     assert report["ok"] is False
     assert any("duplicate question" in error for error in report["errors"])
+
+
+@pytest.mark.unit
+def test_validator_ignores_blank_lines_in_training_jsonl(tmp_path: Path) -> None:
+    root = _copy_evaluation_fixture(tmp_path)
+    path = root / "data" / "synthetic" / "hospital" / "safety.jsonl"
+    path.write_text(path.read_text(encoding="utf-8") + "\n", encoding="utf-8")
+
+    report = validate_evaluation_dataset(root)
+
+    assert report["ok"] is True
