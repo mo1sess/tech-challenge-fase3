@@ -14,9 +14,11 @@ from langgraph.types import interrupt
 
 from clinical_assistant.chains.context_chain import ContextBuilderChain
 from clinical_assistant.config import load_yaml
+from clinical_assistant.audit.audit_logger import JsonlAuditLogger
 from clinical_assistant.database.patient_repository import validate_patient_id
 from clinical_assistant.graph.state import ClinicalWorkflowState
 from clinical_assistant.rag.pipeline import open_protocol_retriever
+from clinical_assistant.safety.guardrails import SafetyGuardrails
 from clinical_assistant.tools.langchain_tools import LangChainToolbox, create_langchain_toolbox
 from clinical_assistant.tools.patient_tools import create_patient_tools
 
@@ -94,6 +96,7 @@ class ClinicalWorkflow:
     max_question_chars: int
     review_terms: list[str]
     review_notice: str
+    guardrails: SafetyGuardrails
 
     def __post_init__(self) -> None:
         self.tool_map = self.toolbox.by_name()
@@ -124,8 +127,14 @@ class ClinicalWorkflow:
                 "get_patient_observations": "observations",
             }[tool_name]
             patient_data[key] = result.get("data")
+        citations = list(state.get("citations", []))
+        if patient_data.get("patient"):
+            citations.append(
+                f"Prontuário sintético {state['patient_id']} — SQLite/Synthea anonimizado"
+            )
         return {
             "patient_data": patient_data,
+            "citations": citations,
             "selected_tools": selected,
             "trace": ["load_patient"],
         }
@@ -145,7 +154,7 @@ class ClinicalWorkflow:
             {"query": state["question"]}
         )
         documents = result.get("documents", [])
-        citations = result.get("citations", [])
+        citations = [*state.get("citations", []), *result.get("citations", [])]
         selected = [*state.get("selected_tools", []), "search_internal_protocol"]
         limitations: list[str] = []
         if _contains_any(state["question"], ("diretriz", "pcdt", "guideline", "oficial")):
@@ -177,21 +186,48 @@ class ClinicalWorkflow:
             "trace": ["generate_response"],
         }
 
+    def input_safety(self, state: ClinicalWorkflowState) -> dict[str, Any]:
+        assessment = self.guardrails.evaluate_input(state["question"]).to_dict()
+        result: dict[str, Any] = {
+            "input_safety_result": assessment,
+            "safety_result": assessment,
+            "requires_human_validation": assessment["requires_human_validation"],
+            "trace": ["input_safety"],
+        }
+        if assessment["blocked"]:
+            result["llm_response"] = assessment["safe_response"]
+            result["generator_mode"] = "deterministic_guardrail"
+        return result
+
+    @staticmethod
+    def route_after_input(state: ClinicalWorkflowState) -> Literal["load_patient", "finalize_response"]:
+        return (
+            "finalize_response"
+            if state["input_safety_result"]["blocked"]
+            else "load_patient"
+        )
+
     def safety_check(self, state: ClinicalWorkflowState) -> dict[str, Any]:
-        triggers = [term for term in self.review_terms if _contains_any(state["question"], (term,))]
-        requires_review = bool(triggers)
-        return {
+        assessment = self.guardrails.evaluate_output(
+            question=state["question"],
+            response=state["llm_response"],
+            sources=state.get("citations", []),
+            data_used=bool(state.get("patient_data") or state.get("retrieved_documents")),
+        ).to_dict()
+        requires_review = assessment["requires_human_validation"]
+        result: dict[str, Any] = {
             "requires_human_validation": requires_review,
-            "safety_result": {
-                "status": "human_review_required" if requires_review else "informational",
-                "triggers": triggers,
-                "autonomous_clinical_action_allowed": False,
-            },
+            "safety_result": assessment,
             "trace": ["safety_check"],
         }
+        if assessment["blocked"]:
+            result["llm_response"] = assessment["safe_response"]
+        return result
 
     @staticmethod
     def route_after_safety(state: ClinicalWorkflowState) -> Literal["human_review", "finalize_response"]:
+        if state["safety_result"]["blocked"]:
+            return "finalize_response"
         return "human_review" if state["requires_human_validation"] else "finalize_response"
 
     def human_review(self, state: ClinicalWorkflowState) -> dict[str, Any]:
@@ -221,7 +257,9 @@ class ClinicalWorkflow:
     def finalize_response(self, state: ClinicalWorkflowState) -> dict[str, Any]:
         citations = state.get("citations", [])
         sources = "\n".join(f"- {citation}" for citation in citations)
-        if state.get("requires_human_validation"):
+        if state.get("safety_result", {}).get("blocked"):
+            response = state["safety_result"]["safe_response"]
+        elif state.get("requires_human_validation"):
             review = state.get("human_validation", {})
             if review.get("approved") is not True:
                 response = (
@@ -239,9 +277,45 @@ class ClinicalWorkflow:
         response += f"\n\n{DISCLAIMER}"
         return {"final_response": response, "trace": ["finalize_response"]}
 
+    def audit_log(self, state: ClinicalWorkflowState) -> dict[str, Any]:
+        documents = [
+            {
+                "document_id": item.get("metadata", {}).get("document_id"),
+                "chunk_id": item.get("chunk_id"),
+                "relevance": item.get("relevance"),
+            }
+            for item in state.get("retrieved_documents", [])
+        ]
+        event = {
+            "event_type": (
+                "security_blocked"
+                if state.get("safety_result", {}).get("blocked")
+                else "workflow_completed"
+            ),
+            "execution_id": state["execution_id"],
+            "timestamp": "",
+            "patient_id": state["patient_id"],
+            "question": state["question"],
+            "tools_called": [*state.get("selected_tools", []), "save_audit_log"],
+            "retrieved_documents": documents,
+            "sources": state.get("citations", []),
+            "model": state.get("generator_mode", "not_executed"),
+            "response": state["final_response"],
+            "safety_result": state.get("safety_result", {}),
+            "human_validation_required": state.get("requires_human_validation", False),
+            "human_validation_result": state.get("human_validation"),
+        }
+        result = self.tool_map["save_audit_log"].invoke({"event": event})
+        return {
+            "audit_result": result,
+            "selected_tools": event["tools_called"],
+            "trace": ["audit_log"],
+        }
+
     def compile(self, *, checkpointer=None):
         builder = StateGraph(ClinicalWorkflowState)
         builder.add_node("validate_input", self.validate_input)
+        builder.add_node("input_safety", self.input_safety)
         builder.add_node("load_patient", self.load_patient)
         builder.add_node("check_pending_exams", self.check_pending_exams)
         builder.add_node("retrieve_protocols", self.retrieve_protocols)
@@ -250,8 +324,14 @@ class ClinicalWorkflow:
         builder.add_node("safety_check", self.safety_check)
         builder.add_node("human_review", self.human_review)
         builder.add_node("finalize_response", self.finalize_response)
+        builder.add_node("audit_log", self.audit_log)
         builder.add_edge(START, "validate_input")
-        builder.add_edge("validate_input", "load_patient")
+        builder.add_edge("validate_input", "input_safety")
+        builder.add_conditional_edges(
+            "input_safety",
+            self.route_after_input,
+            {"load_patient": "load_patient", "finalize_response": "finalize_response"},
+        )
         builder.add_edge("load_patient", "check_pending_exams")
         builder.add_edge("check_pending_exams", "retrieve_protocols")
         builder.add_edge("retrieve_protocols", "build_context")
@@ -263,12 +343,14 @@ class ClinicalWorkflow:
             {"human_review": "human_review", "finalize_response": "finalize_response"},
         )
         builder.add_edge("human_review", "finalize_response")
-        builder.add_edge("finalize_response", END)
+        builder.add_edge("finalize_response", "audit_log")
+        builder.add_edge("audit_log", END)
         return builder.compile(checkpointer=checkpointer or MemorySaver())
 
 
 def create_clinical_workflow(root: Path, *, generator: ResponseGenerator | None = None):
     config = load_yaml(root / "configs" / "agent.yaml")
+    safety_config = load_yaml(root / "configs" / "safety.yaml")
     patient_tools = create_patient_tools(root)
     retriever = open_protocol_retriever(root)
     toolbox = create_langchain_toolbox(
@@ -277,6 +359,12 @@ def create_clinical_workflow(root: Path, *, generator: ResponseGenerator | None 
         guideline_limitation=config["context"]["unavailable_sources"][
             "search_clinical_guideline"
         ],
+        audit_logger=JsonlAuditLogger(
+            root / safety_config["audit"]["path"],
+            maximum_question_chars=int(safety_config["audit"]["maximum_question_chars"]),
+            maximum_response_chars=int(safety_config["audit"]["maximum_response_chars"]),
+            maximum_events_to_read=int(safety_config["audit"]["maximum_events_to_read"]),
+        ),
     )
     workflow = ClinicalWorkflow(
         toolbox=toolbox,
@@ -287,5 +375,9 @@ def create_clinical_workflow(root: Path, *, generator: ResponseGenerator | None 
         max_question_chars=int(config["execution"]["max_question_chars"]),
         review_terms=list(map(str, config["human_review"]["trigger_terms"])),
         review_notice=str(config["human_review"]["notice"]),
+        guardrails=SafetyGuardrails(
+            safety_config["guardrails"],
+            review_terms=list(map(str, config["human_review"]["trigger_terms"])),
+        ),
     )
     return workflow.compile()

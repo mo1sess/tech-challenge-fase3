@@ -16,10 +16,12 @@ class ClinicalWorkflowState(TypedDict, total=False):
     context: str
     prompt: str
     llm_response: str
+    input_safety_result: dict[str, Any]
     safety_result: dict[str, Any]
     requires_human_validation: bool
     human_validation: dict[str, Any]
     final_response: str
+    audit_result: dict[str, Any]
     execution_id: str
     generator_mode: str
     selected_tools: list[str]

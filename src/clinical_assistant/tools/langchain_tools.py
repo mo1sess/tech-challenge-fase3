@@ -15,6 +15,10 @@ class ProtocolSearch(Protocol):
     def retrieve(self, query: str) -> list[RetrievalHit]: ...
 
 
+class AuditSink(Protocol):
+    def record(self, event: dict[str, Any]) -> dict[str, Any]: ...
+
+
 @dataclass(frozen=True)
 class LangChainToolbox:
     tools: tuple[BaseTool, ...]
@@ -28,6 +32,7 @@ def create_langchain_toolbox(
     protocol_retriever: ProtocolSearch,
     *,
     guideline_limitation: str,
+    audit_logger: AuditSink | None = None,
 ) -> LangChainToolbox:
     """Create named tools without a generic SQL or filesystem escape hatch."""
 
@@ -80,6 +85,13 @@ def create_langchain_toolbox(
             "limitation": guideline_limitation,
         }
 
+    def save_audit_log(event: dict[str, Any]) -> dict[str, Any]:
+        """Append one validated workflow event to the integrity-protected audit log."""
+
+        if audit_logger is None:
+            raise RuntimeError("audit logger is not configured")
+        return audit_logger.record(event)
+
     functions = (
         get_patient,
         get_patient_conditions,
@@ -89,6 +101,7 @@ def create_langchain_toolbox(
         search_internal_protocol,
         search_clinical_guideline,
     )
-    return LangChainToolbox(
-        tuple(StructuredTool.from_function(function) for function in functions)
-    )
+    tools = [StructuredTool.from_function(function) for function in functions]
+    if audit_logger is not None:
+        tools.append(StructuredTool.from_function(save_audit_log))
+    return LangChainToolbox(tuple(tools))

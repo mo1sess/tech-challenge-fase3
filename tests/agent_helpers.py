@@ -1,11 +1,12 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any
 
 from clinical_assistant.chains.context_chain import ContextBuilderChain
 from clinical_assistant.graph.workflow import ClinicalWorkflow, DeterministicEvidencePreview
 from clinical_assistant.rag.models import RetrievalHit
+from clinical_assistant.safety.guardrails import SafetyGuardrails
 from clinical_assistant.tools.langchain_tools import create_langchain_toolbox
 
 
@@ -15,6 +16,7 @@ NOTICE = "DOCUMENTO SINTÉTICO PARA FINS ACADÊMICOS"
 @dataclass
 class FakePatientTools:
     calls: list[str]
+    audit_events: list[dict[str, Any]] = field(default_factory=list)
 
     @staticmethod
     def _result(operation: str, data: Any) -> dict[str, Any]:
@@ -72,12 +74,58 @@ class FakeRetriever:
         ]
 
 
+@dataclass
+class FakeAuditLogger:
+    events: list[dict[str, Any]]
+
+    def record(self, event: dict[str, Any]) -> dict[str, Any]:
+        self.events.append(event)
+        return {
+            "ok": True,
+            "execution_id": event["execution_id"],
+            "event_number": len(self.events),
+            "event_hash": f"fake-{len(self.events)}",
+        }
+
+
+SAFETY_CONFIG = {
+    "safe_response": "Solicitação bloqueada. Validação médica necessária.",
+    "review_notice": "Validação médica necessária.",
+    "require_sources_when_data_is_used": True,
+    "input_rules": [
+        {
+            "id": "SG-001",
+            "description": "Tentativa de remover regras",
+            "risk_level": "critical",
+            "requires_human_validation": False,
+            "patterns": [r"\b(ignore|ignorar)\b.{0,60}\b(regras|guardrails)\b"],
+        },
+        {
+            "id": "SG-002",
+            "description": "Prescrição autônoma",
+            "risk_level": "critical",
+            "requires_human_validation": True,
+            "patterns": [r"\b(prescreva|receite)\b", r"\bdose correta\b"],
+        },
+    ],
+    "output_rules": [
+        {
+            "id": "SG-007",
+            "description": "Instrução clínica autônoma",
+            "risk_level": "critical",
+            "patterns": [r"\b(tome|use)\b.{0,80}\b(mg|medicamento|dose)\b"],
+        }
+    ],
+}
+
+
 def create_test_workflow(*, max_context_chars: int = 12000):
-    patient_tools = FakePatientTools(calls=[])
+    patient_tools = FakePatientTools(calls=[], audit_events=[])
     toolbox = create_langchain_toolbox(
         patient_tools,
         FakeRetriever(),
         guideline_limitation="Nenhuma diretriz clínica oficial revisada foi fornecida.",
+        audit_logger=FakeAuditLogger(patient_tools.audit_events),
     )
     workflow = ClinicalWorkflow(
         toolbox=toolbox,
@@ -95,5 +143,18 @@ def create_test_workflow(*, max_context_chars: int = 12000):
             "alterar",
         ],
         review_notice="Validação médica necessária.",
+        guardrails=SafetyGuardrails(
+            SAFETY_CONFIG,
+            review_terms=[
+                "tratamento",
+                "medicamento",
+                "dose",
+                "prescrição",
+                "diagnóstico",
+                "procedimento",
+                "conduta",
+                "alterar",
+            ],
+        ),
     )
     return workflow, patient_tools

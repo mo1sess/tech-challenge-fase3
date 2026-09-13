@@ -1,4 +1,4 @@
-"""Run the stage 8 local workflow and handle an optional human-review interrupt."""
+"""Run the stage 9 protected workflow and handle an optional human-review interrupt."""
 
 from __future__ import annotations
 
@@ -56,7 +56,7 @@ if __name__ == "__main__":
                 resume={
                     "approved": _decision(arguments.review),
                     "reviewer": "cli_demo_user",
-                    "notes": "Decisão de demonstração da ETAPA 8.",
+                    "notes": "Decisão de demonstração da ETAPA 9.",
                 }
             ),
             config=run_config,

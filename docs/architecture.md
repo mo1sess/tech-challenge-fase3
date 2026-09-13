@@ -1,4 +1,4 @@
-# Arquitetura até a ETAPA 8
+# Arquitetura até a ETAPA 9
 
 As ETAPAS 0 e 1 contêm fundação, configuração, aquisição, inventário e
 validação estrutural. A ETAPA 2 acrescenta um fluxo local e reproduzível:
@@ -26,8 +26,8 @@ alimentam um gerador deterministico. Ele produz seis arquivos JSONL com aviso
 academico explicito e um manifesto com contagens e hashes. Um validador
 independente confere esquema, procedencia, unicidade e controles de seguranca.
 
-O desenho futuro preserva camadas separadas para dados estruturados, RAG,
-LangChain, LangGraph, segurança, auditoria, avaliação e interface.
+O desenho preserva camadas separadas para dados estruturados, RAG, LangChain,
+LangGraph, segurança, auditoria, avaliação e interface.
 
 O modelo oficial permanece `Qwen/Qwen3-8B`. Seu treinamento QLoRA é restrito a
 Google Colab ou Kaggle; a GTX 1650 local é bloqueada pelo requisito mínimo de
@@ -102,4 +102,26 @@ monta um prompt limitado e gera uma prévia determinística injetável.
 Após a geração, uma aresta condicional separa consultas informativas das que
 podem alterar conduta. O segundo ramo chama `interrupt()` no nó de revisão
 humana e exige retomada explícita antes da resposta final. O checkpointer desta
-etapa é volátil; a persistência e a auditoria serão adicionadas na ETAPA 9.
+etapa continua volátil e não é confundido com o log de auditoria.
+
+A ETAPA 9 envolve o grafo com duas barreiras determinísticas e uma trilha de
+auditoria independente:
+
+```text
+pergunta
+  -> validação estrutural
+  -> guardrail de entrada --bloqueio--> resposta segura
+  -> SQLite + RAG -> geração
+  -> guardrail de saída --bloqueio--> resposta segura
+  -> [revisão humana quando exigida]
+  -> resposta final
+  -> evento JSONL append-only + cadeia SHA-256
+```
+
+O bloqueio de entrada ocorre antes das ferramentas de paciente e retrieval. O
+evento final registra ID da execução, horário, paciente pseudonimizado,
+pergunta, ferramentas, documentos recuperados, fontes, modo de geração,
+resposta, resultado de segurança e resultado da revisão humana. O conteúdo
+completo dos documentos não é duplicado no log; ficam apenas identificadores e
+relevância. A cadeia detecta remoção, reordenação ou alteração retroativa de
+eventos, mas não substitui armazenamento regulatório com controle de acesso.

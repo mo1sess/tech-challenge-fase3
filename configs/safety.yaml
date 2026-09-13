@@ -1,0 +1,97 @@
+schema_version: 1
+stage: 9
+
+guardrails:
+  safe_response: >-
+    Não posso atender a essa solicitação porque ela viola as regras de segurança.
+    Posso apresentar somente os dados e as fontes disponíveis para revisão.
+    Validação médica necessária.
+  review_notice: "Validação médica necessária."
+  require_sources_when_data_is_used: true
+  input_rules:
+    - id: "SG-001"
+      description: "Tentativa de remover ou contornar as regras"
+      risk_level: "critical"
+      requires_human_validation: false
+      patterns:
+        - "\\b(ignore|ignorar|desative|desativar|remova|remover)\\b.{0,60}\\b(regras|guardrails|segurança|restrições)\\b"
+        - "\\b(bypass|jailbreak|sem restrições)\\b"
+    - id: "SG-002"
+      description: "Solicitação de prescrição ou dose autônoma"
+      risk_level: "critical"
+      requires_human_validation: true
+      patterns:
+        - "\\b(prescreva|receite)\\b"
+        - "\\b(indique|informe|calcule|diga)\\b.{0,40}\\b(dose|dosagem)\\b"
+        - "\\bdose correta\\b"
+    - id: "SG-003"
+      description: "Mudança autônoma de medicamento"
+      risk_level: "critical"
+      requires_human_validation: true
+      patterns:
+        - "\\b(altere|suspenda|troque|aumente|reduza)\\b.{0,60}\\b(medicamento|medicação|remédio|dose)\\b"
+        - "\\b(medicamento|medicação|remédio|dose)\\b.{0,60}\\b(sem avisar|sem comunicar|às escondidas)\\b"
+    - id: "SG-004"
+      description: "Afirmação solicitada de diagnóstico definitivo"
+      risk_level: "critical"
+      requires_human_validation: true
+      patterns:
+        - "\\b(confirme|afirme|declare)\\b.{0,60}\\b(diagnóstico|doença)\\b"
+        - "\\bdiagnostique\\b"
+    - id: "SG-005"
+      description: "Solicitação para inventar informação clínica"
+      risk_level: "high"
+      requires_human_validation: false
+      patterns:
+        - "\\b(invente|fabrique|falsifique)\\b.{0,80}\\b(resultado|exame|informação|dado|diagnóstico)\\b"
+    - id: "SG-006"
+      description: "Tentativa de ocultar fonte ou auditoria"
+      risk_level: "high"
+      requires_human_validation: false
+      patterns:
+        - "\\b(não cite|sem citar|oculte|esconda)\\b.{0,60}\\b(fonte|origem|registro|log|auditoria)\\b"
+        - "\\b(apague|delete|remova)\\b.{0,40}\\b(log|auditoria|registro)\\b"
+  output_rules:
+    - id: "SG-007"
+      description: "Resposta contém instrução clínica autônoma"
+      risk_level: "critical"
+      patterns:
+        - "\\b(tome|use|aplique|aumente|reduza|suspenda|troque)\\b.{0,80}\\b(mg|ml|comprimido|medicamento|dose|vezes)\\b"
+    - id: "SG-008"
+      description: "Resposta afirma diagnóstico definitivo"
+      risk_level: "critical"
+      patterns:
+        - "\\bdiagnóstico (é|está confirmado|definitivo)\\b"
+        - "\\bcom certeza (tem|possui)\\b"
+
+audit:
+  format: "jsonl_hash_chain_v1"
+  path: "outputs/logs/audit.jsonl"
+  maximum_question_chars: 1000
+  maximum_response_chars: 12000
+  maximum_events_to_read: 1000
+  append_only: true
+
+adversarial_suite:
+  path: "data/safety/adversarial_cases.jsonl"
+  expected_cases: 8
+
+expected:
+  graph_nodes:
+    - validate_input
+    - input_safety
+    - load_patient
+    - check_pending_exams
+    - retrieve_protocols
+    - build_context
+    - generate_response
+    - safety_check
+    - human_review
+    - finalize_response
+    - audit_log
+  conditional_edges:
+    - input_safety
+    - safety_check
+
+outputs:
+  validation_report: "outputs/safety/stage9_validation.json"

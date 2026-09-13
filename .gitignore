@@ -52,6 +52,11 @@ outputs/**
 !outputs/database/database_manifest.json
 !outputs/agent/
 !outputs/agent/stage8_validation.json
+!outputs/safety/
+!outputs/safety/stage9_validation.json
+
+# Runtime audit events may contain questions and patient pseudonyms.
+outputs/logs/
 
 # Model artifacts and caches.
 *.safetensors
