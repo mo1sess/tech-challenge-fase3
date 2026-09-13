@@ -1,6 +1,6 @@
 project:
   name: "Assistente Clinico TechCare"
-  stage: "0-1"
+  stage: "0-6"
   locale: "pt-BR"
   disclaimer: >-
     Este sistema e um prototipo academico e nao deve ser utilizado para

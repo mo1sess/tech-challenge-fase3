@@ -1,8 +1,7 @@
-# Reserved for later approved stages; not installed or used in stages 0-1.
+# Dependencias reservadas para as etapas posteriores ao RAG.
+-r rag-local.txt
 langchain==0.3.26
 langchain-community==0.3.26
 langgraph==0.4.8
-chromadb==1.0.13
 streamlit==1.46.1
-sentence-transformers==4.1.0
 

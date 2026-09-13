@@ -93,3 +93,19 @@ ensinar comportamento, estrutura institucional e limites de atuação. MedQuAD e
 PubMedQA permanecem como dados públicos auxiliares já preparados na ETAPA 2;
 incluí-los por padrão faria os poucos exemplos internos serem dominados pelo
 volume público, majoritariamente em inglês.
+
+## Corpus RAG da ETAPA 6
+
+Os 15 registros de `protocols.jsonl` contêm três formulações de pergunta para
+cada orientação. A ingestão agrupa essas paráfrases em 5 documentos lógicos,
+ASM-001 a ASM-005, e gera 5 chunks na configuração atual.
+
+Metadados obrigatórios de cada chunk: `document_id`, `document_name`, `version`,
+`section`, `source`, `document_type`, `synthetic`, `notice`, `chunk_index` e
+`chunk_count`. O texto e os metadados ficam em
+`data/processed/rag/protocol_chunks.jsonl`; a coleção Chroma é reconstruível e
+fica fora do Git.
+
+Este corpus é inteiramente fictício e operacional. Ele permite testar ingestão,
+retrieval e explainability, mas não substitui PCDT, diretriz pública revisada ou
+validação médica. Nenhum protocolo clínico oficial foi fornecido até esta etapa.

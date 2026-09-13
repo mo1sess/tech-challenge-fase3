@@ -2,7 +2,7 @@
 
 Fundação reproduzível de um protótipo acadêmico de apoio ao acompanhamento de
 pacientes com asma. O repositório está deliberadamente limitado às **ETAPAS 0
-a 5: fundação, dados, baseline e preparação do fine-tuning QLoRA**.
+a 6: fundação, dados, baseline, fine-tuning QLoRA e RAG local**.
 
 > **Aviso:** Este sistema é um protótipo acadêmico e não deve ser utilizado para
 > diagnóstico, prescrição ou tomada autônoma de decisões clínicas.
@@ -19,8 +19,10 @@ a 5: fundação, dados, baseline e preparação do fine-tuning QLoRA**.
   `outputs/baseline/baseline-20260913T143007Z`.
 - Concluído em GPU remota: fine-tuning QLoRA real do Qwen3-8B, dataset
   estratificado, validação, adapter separado, métricas, logs e hashes.
-- Não implementado: SQLite, RAG, LangChain, LangGraph, guardrails em tempo de
-  execução, auditoria, comparação de modelos e Streamlit.
+- Implementado localmente: ingestão deduplicada de protocolos sintéticos,
+  embeddings multilíngues em CPU, ChromaDB persistente, retrieval e citações.
+- Não implementado: SQLite, LangChain, LangGraph, guardrails em tempo de
+  execução, auditoria integrada, comparação de modelos e Streamlit.
 - Modelo oficial: `Qwen/Qwen3-8B`, sem substituição silenciosa.
 
 ## Ambiente escolhido
@@ -32,8 +34,9 @@ a 5: fundação, dados, baseline e preparação do fine-tuning QLoRA**.
 - Fine-tuning em Linux com GPU no Google Colab; Kaggle como alternativa.
 
 As dependências estão separadas em `requirements/local.txt`,
-`requirements/dev.txt`, `requirements/gpu-colab-kaggle.txt` e
-`requirements/future-app.txt`. Somente o grupo local/dev é necessário agora.
+`requirements/dev.txt`, `requirements/rag-local.txt`,
+`requirements/gpu-colab-kaggle.txt` e `requirements/future-app.txt`. A pilha
+RAG é local e CPU-only; a pilha de treinamento remoto permanece separada.
 
 ## Preparação no Windows
 
@@ -154,14 +157,41 @@ adapter final tem 166,56 MiB e permanece separado da revisão fixada do modelo
 base. Esses números demonstram execução, não correção clínica; o conjunto
 pequeno apresenta risco de memorização.
 
+## RAG local com ChromaDB
+
+Instale as dependências específicas e construa a base:
+
+```powershell
+python -m pip install -r requirements\rag-local.txt
+python scripts\build_rag_index.py
+python scripts\validate_rag_index.py
+```
+
+O pipeline converte os 15 exemplos de protocolo em 5 documentos lógicos,
+removendo as três paráfrases de treinamento de cada ASM. Cada documento gera um
+chunk auditável com `document_id`, nome, versão, seção, fonte, tipo e aviso de
+conteúdo sintético. Os embeddings do modelo multilíngue fixado são calculados
+somente em CPU e armazenados em uma coleção Chroma persistente.
+
+Consulta de demonstração:
+
+```powershell
+python scripts\query_rag.py "Como verificar exames pendentes?"
+```
+
+Cada resultado inclui distância, relevância, trecho e citação. A coleção local
+fica em `data/vectorstore/chroma` e não é versionada; os chunks e o manifesto
+com hashes ficam no Git. Consulte `docs/stage_6_rag.md`.
+
 ## Testes
 
 ```powershell
 python -m pytest
 ```
 
-Os markers são `unit`, `integration`, `network` e `gpu`. Os 48 testes locais não
-usam rede nem GPU; a execução pesada permanece separada.
+Os markers são `unit`, `integration`, `network` e `gpu`. Nesta entrega, os 57
+testes passaram em 68,23 segundos no Windows. Eles não usam GPU; somente a
+instalação inicial do modelo de embeddings requer rede.
 
 ## Fontes
 
@@ -183,6 +213,6 @@ dos downloads antes de redistribuir os datasets.
 
 ## Próxima etapa (aguardando aprovação)
 
-A ETAPA 5 produziu `complete: true`, adapter funcional e evidências validadas.
-A ETAPA 6 (RAG) está tecnicamente desbloqueada, mas não será iniciada sem nova
-aprovação explícita.
+A ETAPA 6 produz uma base RAG local com citações e validação independente. A
+ETAPA 7 (SQLite e ferramentas de paciente) não será iniciada sem nova aprovação
+explícita.

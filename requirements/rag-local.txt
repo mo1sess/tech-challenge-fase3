@@ -1,0 +1,5 @@
+# ETAPA 6 - RAG local em CPU. Nao instala a pilha CUDA de treinamento.
+-r local.txt
+chromadb==1.0.15
+sentence-transformers==4.1.0
+transformers==4.53.2

@@ -1,0 +1,34 @@
+schema_version: 1
+stage: 6
+
+source:
+  protocols_file: "data/synthetic/hospital/protocols.jsonl"
+  kind: "synthetic_internal_protocol"
+  expected_records: 15
+  expected_documents: 5
+  required_notice: "DOCUMENTO SINTÉTICO PARA FINS ACADÊMICOS"
+
+chunking:
+  size_chars: 1200
+  overlap_chars: 150
+
+embeddings:
+  provider: "sentence_transformers"
+  model_id: "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+  revision: "e8f8c211226b894fcb81acc59f3b34ba3efd5f42"
+  device: "cpu"
+  normalize: true
+
+vector_store:
+  provider: "chromadb"
+  persistence_directory: "data/vectorstore/chroma"
+  collection_name: "techcare_protocols_v1"
+  distance: "cosine"
+
+retrieval:
+  top_k: 3
+  minimum_relevance: 0.45
+
+outputs:
+  chunks_file: "data/processed/rag/protocol_chunks.jsonl"
+  manifest: "outputs/rag/index_manifest.json"

@@ -1,4 +1,4 @@
-# Arquitetura até a ETAPA 5
+# Arquitetura até a ETAPA 6
 
 As ETAPAS 0 e 1 contêm fundação, configuração, aquisição, inventário e
 validação estrutural. A ETAPA 2 acrescenta um fluxo local e reproduzível:
@@ -56,3 +56,23 @@ data/synthetic/hospital/*.jsonl
 O notebook apenas orquestra a execução. A preparação, o treino e a inferência
 permanecem em `src/clinical_assistant/finetuning`. Nenhum resultado de treino é
 declarado antes da execução remota produzir evidências reais.
+
+A ETAPA 6 introduz RAG sem acoplar LangChain ou a LLM. Os 15 exemplos de
+treinamento de protocolos são agrupados por documento, versão, seção e
+orientação, resultando em 5 documentos lógicos. Isso impede que paráfrases
+idênticas artificialmente dominem o ranking.
+
+```text
+data/synthetic/hospital/protocols.jsonl
+  -> validação de procedência e aviso sintético
+  -> deduplicação em ASM-001 ... ASM-005
+  -> chunking determinístico + metadata de citação
+  -> embedding multilíngue em CPU
+  -> ChromaDB persistente
+  -> top-k + limiar de relevância + citação
+```
+
+Os vetores são informados explicitamente ao Chroma, mantendo o modelo de
+embedding desacoplado do banco. O manifesto registra hashes, revisão imutável do
+modelo, dimensão e contagens. A coleção pode ser reconstruída integralmente a
+partir dos arquivos versionados.

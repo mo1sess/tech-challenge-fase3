@@ -1,0 +1,50 @@
+{
+  "chunking": {
+    "chunks": 5,
+    "chunks_sha256": "9a43a06bca72cbc972f850905519bff3237be74c25524f8b198443941c2f121d",
+    "overlap_chars": 150,
+    "size_chars": 1200
+  },
+  "complete": true,
+  "embeddings": {
+    "device": "cpu",
+    "dimensions": 384,
+    "model_id": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "normalized": true,
+    "provider": "sentence_transformers",
+    "revision": "e8f8c211226b894fcb81acc59f3b34ba3efd5f42"
+  },
+  "environment": {
+    "chromadb": "1.0.15",
+    "gpu_used": false,
+    "platform": "Windows",
+    "python": "3.12.14",
+    "sentence_transformers": "4.1.0",
+    "torch": "2.14.0",
+    "transformers": "4.53.2"
+  },
+  "generated_at_utc": "2026-09-13T18:33:18.679793+00:00",
+  "limitations": [
+    "A base contém apenas protocolos internos sintéticos para demonstração acadêmica.",
+    "Os resultados recuperados não estabelecem correção clínica nem autorizam conduta.",
+    "Toda decisão clínica exige validação humana e uma fonte clínica oficial revisada."
+  ],
+  "schema_version": 1,
+  "source": {
+    "kind": "synthetic_internal_protocol",
+    "logical_documents": 5,
+    "notice": "DOCUMENTO SINTÉTICO PARA FINS ACADÊMICOS",
+    "path": "data/synthetic/hospital/protocols.jsonl",
+    "records": 15,
+    "sha256": "a634d4427ea8636ab7703a7e84525a2343c3aad095a056c69da645ebaa7ef6b6",
+    "synthetic": true
+  },
+  "stage": 6,
+  "vector_store": {
+    "collection_name": "techcare_protocols_v1",
+    "distance": "cosine",
+    "indexed_chunks": 5,
+    "persistence_directory": "data/vectorstore/chroma",
+    "provider": "chromadb"
+  }
+}
