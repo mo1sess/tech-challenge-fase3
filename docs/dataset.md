@@ -70,3 +70,26 @@ operacionais e de segurança; não constituem diretriz clínica real.
 As 24 perguntas são versionadas em `data/evaluation`. A verificação encontrou
 24 IDs e textos únicos e zero coincidências exatas com as instruções de treino
 disponíveis. O conjunto não deve ser incorporado ao fine-tuning.
+
+## Dataset específico da ETAPA 5
+
+| Categoria | Treino | Validação | Teste |
+|---|---:|---:|---:|
+| FAQ | 16 | 2 | 2 |
+| Comportamento para receitas | 10 | 1 | 1 |
+| Procedimento | 13 | 1 | 1 |
+| Protocolo | 13 | 1 | 1 |
+| Modelo de laudo/registro | 10 | 1 | 1 |
+| Segurança | 16 | 2 | 2 |
+| **Total** | **78** | **8** | **8** |
+
+A divisão é estratificada por categoria e ordenada por hash com seed 42. Os 94
+hashes permanecem únicos e não há compartilhamento entre as partições. A
+validação também confirmou zero coincidências exatas com as 24 perguntas
+reservadas.
+
+O QLoRA desta etapa usa somente o conjunto interno sintético, pois o objetivo é
+ensinar comportamento, estrutura institucional e limites de atuação. MedQuAD e
+PubMedQA permanecem como dados públicos auxiliares já preparados na ETAPA 2;
+incluí-los por padrão faria os poucos exemplos internos serem dominados pelo
+volume público, majoritariamente em inglês.

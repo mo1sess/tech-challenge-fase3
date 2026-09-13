@@ -2,7 +2,7 @@
 
 Fundação reproduzível de um protótipo acadêmico de apoio ao acompanhamento de
 pacientes com asma. O repositório está deliberadamente limitado às **ETAPAS 0
-a 4: fundação, aquisição, preparação, dados internos sintéticos e baseline**.
+a 5: fundação, dados, baseline e preparação do fine-tuning QLoRA**.
 
 > **Aviso:** Este sistema é um protótipo acadêmico e não deve ser utilizado para
 > diagnóstico, prescrição ou tomada autônoma de decisões clínicas.
@@ -17,9 +17,11 @@ a 4: fundação, aquisição, preparação, dados internos sintéticos e baselin
 - Concluído em GPU remota: baseline reproduzível do Qwen3-8B com 24 casos
   separados, execução oficial completa e evidências preservadas em
   `outputs/baseline/baseline-20260913T143007Z`.
-- Não implementado: fine-tuning, SQLite, RAG, LangChain, LangGraph, guardrails
-  em tempo de execução, auditoria, comparação de modelos e Streamlit.
-- Modelo oficial futuro: `Qwen/Qwen3-8B`, sem substituição silenciosa.
+- Implementado, aguardando execução remota: pipeline QLoRA, dataset
+  estratificado, validação, adapter separado, métricas, logs e notebook Colab.
+- Não implementado: SQLite, RAG, LangChain, LangGraph, guardrails em tempo de
+  execução, auditoria, comparação de modelos e Streamlit.
+- Modelo oficial: `Qwen/Qwen3-8B`, sem substituição silenciosa.
 
 ## Ambiente escolhido
 
@@ -27,7 +29,7 @@ a 4: fundação, aquisição, preparação, dados internos sintéticos e baselin
 - Python 3.12 (`>=3.12,<3.13`).
 - GPU local GTX 1650 4 GB somente para testes técnicos leves; não executar o
   treinamento QLoRA do Qwen3-8B nela.
-- Fine-tuning futuro em Linux com GPU no Google Colab; Kaggle como alternativa.
+- Fine-tuning em Linux com GPU no Google Colab; Kaggle como alternativa.
 
 As dependências estão separadas em `requirements/local.txt`,
 `requirements/dev.txt`, `requirements/gpu-colab-kaggle.txt` e
@@ -123,13 +125,35 @@ A execução oficial deve ser feita em GPU remota pelo notebook
 casos e depois a execução completa, sem `--limit`. As evidências são gravadas
 em `outputs/baseline`.
 
+Resultado medido: 24 casos concluídos em uma Tesla T4, nota média de rubrica
+lexical 0,7604, taxa aceitável 0,25, tempo total de 324,98 segundos e pico de
+5,89 GB de VRAM. A rubrica não comprova correção clínica.
+
+## Fine-tuning QLoRA
+
+Preparação e validação local do dataset da ETAPA 5:
+
+```powershell
+python scripts\prepare_finetuning_data.py
+python scripts\validate_finetuning_data.py
+```
+
+O dataset usa os 94 exemplos sintéticos internos e produz uma divisão
+estratificada com 78 registros de treino, 8 de validação e 8 de teste. Os 24
+casos da avaliação permanecem reservados, com zero coincidências exatas.
+
+O treinamento real deve ser executado em GPU remota pelo notebook
+`notebooks/05_finetuning.ipynb`. O pipeline usa QLoRA 4-bit NF4, mantém o
+Qwen3-8B imutável e salva o adapter LoRA separadamente, além de losses, métricas,
+logs, hashes e um teste de inferência. Consulte `docs/stage_5_qlora.md`.
+
 ## Testes
 
 ```powershell
 python -m pytest
 ```
 
-Os markers são `unit`, `integration`, `network` e `gpu`. Os 41 testes locais não
+Os markers são `unit`, `integration`, `network` e `gpu`. Os 48 testes locais não
 usam rede nem GPU; a execução pesada permanece separada.
 
 ## Fontes
@@ -150,9 +174,9 @@ dos downloads antes de redistribuir os datasets.
   pode ser apresentado como protocolo real.
 - Resultados e quantidades só são documentados quando medidos por execução.
 
-## Próxima etapa (aguardando aprovação)
+## Próxima etapa (bloqueada)
 
-A ETAPA 4 produziu um baseline oficial com `complete: true` e 24 casos. A
-ETAPA 5 (QLoRA) está tecnicamente desbloqueada, mas não será iniciada sem
-aprovação explícita. Consulte `docs/stage_4_baseline.md` para resultados e
-limitações.
+A implementação local da ETAPA 5 está pronta, mas o fine-tuning ainda precisa
+ser realmente executado no Colab. A ETAPA 6 (RAG) permanece bloqueada até o
+treinamento produzir `complete: true`, o adapter e as evidências serem
+preservados e houver nova aprovação explícita.

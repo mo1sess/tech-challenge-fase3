@@ -1,6 +1,6 @@
-# Remote Linux GPU environment only. Do not install for the GTX 1650 laptop.
-# Qwen3 requires Transformers >=4.51; this set is pinned as one tested family.
-torch==2.7.1
+# Google Colab/Kaggle Linux GPU only. Never install on the GTX 1650 laptop.
+# Keep the CUDA-enabled PyTorch supplied by the hosted runtime.
+PyYAML==6.0.3
 transformers==4.53.2
 peft==0.16.0
 trl==0.19.1
@@ -9,4 +9,3 @@ bitsandbytes==0.46.0
 datasets==3.6.0
 safetensors==0.5.3
 sentencepiece==0.2.0
-
