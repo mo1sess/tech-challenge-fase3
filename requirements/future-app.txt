@@ -1,7 +1,4 @@
-# Dependencias reservadas para as etapas posteriores ao RAG.
--r rag-local.txt
-langchain==0.3.26
-langchain-community==0.3.26
-langgraph==0.4.8
+# Dependencias reservadas para a interface posterior ao agente.
+-r agent-local.txt
 streamlit==1.46.1
 

@@ -1,0 +1,66 @@
+schema_version: 1
+stage: 8
+
+execution:
+  mode: "local_cpu"
+  generator: "deterministic_evidence_preview"
+  max_question_chars: 1000
+  max_context_chars: 12000
+  checkpointer: "memory"
+
+context:
+  patient_tools:
+    - get_patient
+    - get_patient_conditions
+    - get_patient_medications
+    - get_pending_exams
+    - get_patient_observations
+  retrieval_tools:
+    - search_internal_protocol
+    - search_clinical_guideline
+  unavailable_sources:
+    search_clinical_guideline: >-
+      Nenhuma diretriz clínica oficial revisada foi fornecida ao projeto.
+
+human_review:
+  enabled: true
+  trigger_terms:
+    - tratamento
+    - tratar
+    - medicamento
+    - medicação
+    - dose
+    - dosagem
+    - prescrição
+    - prescrever
+    - diagnóstico
+    - diagnosticar
+    - procedimento
+    - conduta
+    - alterar
+    - suspender
+    - iniciar
+  notice: "Validação médica necessária."
+
+safety:
+  synthetic_only: true
+  allow_autonomous_prescription: false
+  allow_definitive_diagnosis: false
+  allow_arbitrary_sql: false
+  require_sources: true
+
+expected:
+  graph_nodes:
+    - validate_input
+    - load_patient
+    - check_pending_exams
+    - retrieve_protocols
+    - build_context
+    - generate_response
+    - safety_check
+    - human_review
+    - finalize_response
+  conditional_edge: "safety_check"
+
+outputs:
+  validation_report: "outputs/agent/stage8_validation.json"

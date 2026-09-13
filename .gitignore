@@ -50,6 +50,8 @@ outputs/**
 !outputs/rag/index_manifest.json
 !outputs/database/
 !outputs/database/database_manifest.json
+!outputs/agent/
+!outputs/agent/stage8_validation.json
 
 # Model artifacts and caches.
 *.safetensors

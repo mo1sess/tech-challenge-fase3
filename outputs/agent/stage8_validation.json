@@ -1,0 +1,39 @@
+{
+  "dependencies": {
+    "langchain": "0.3.26",
+    "langchain-community": "0.3.26",
+    "langgraph": "0.4.8"
+  },
+  "errors": [],
+  "execution": {
+    "generator": "deterministic_evidence_preview",
+    "gpu_used": false,
+    "mode": "local_cpu",
+    "official_qwen_executed": false
+  },
+  "graph": {
+    "conditional_edge": "safety_check",
+    "human_review_enabled": true,
+    "node_count": 9,
+    "nodes": [
+      "validate_input",
+      "load_patient",
+      "check_pending_exams",
+      "retrieve_protocols",
+      "build_context",
+      "generate_response",
+      "safety_check",
+      "human_review",
+      "finalize_response"
+    ]
+  },
+  "ok": true,
+  "prerequisites": {
+    "database_patients": 108,
+    "database_stage": 7,
+    "rag_documents": 5,
+    "rag_stage": 6
+  },
+  "stage": 8,
+  "validated_at_utc": "2026-09-13T19:58:11.248412+00:00"
+}

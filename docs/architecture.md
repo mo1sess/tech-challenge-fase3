@@ -1,4 +1,4 @@
-# Arquitetura até a ETAPA 7
+# Arquitetura até a ETAPA 8
 
 As ETAPAS 0 e 1 contêm fundação, configuração, aquisição, inventário e
 validação estrutural. A ETAPA 2 acrescenta um fluxo local e reproduzível:
@@ -93,3 +93,13 @@ O banco não contém nome, documento, endereço ou coordenadas. O agente futuro
 não receberá uma ferramenta de SQL genérico: somente consultas predefinidas de
 paciente, condições, medicamentos, observações e exames pendentes. O manifesto
 versionado permite confirmar hash, contagens e versão do esquema.
+
+A ETAPA 8 conecta essas fontes por ferramentas LangChain e um StateGraph. Cada
+nó recebe somente a parcela de estado necessária. O fluxo lê o paciente e as
+pendências no SQLite, recupera no máximo os chunks configurados do Chroma,
+monta um prompt limitado e gera uma prévia determinística injetável.
+
+Após a geração, uma aresta condicional separa consultas informativas das que
+podem alterar conduta. O segundo ramo chama `interrupt()` no nó de revisão
+humana e exige retomada explícita antes da resposta final. O checkpointer desta
+etapa é volátil; a persistência e a auditoria serão adicionadas na ETAPA 9.

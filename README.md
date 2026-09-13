@@ -2,7 +2,7 @@
 
 Fundação reproduzível de um protótipo acadêmico de apoio ao acompanhamento de
 pacientes com asma. O repositório está deliberadamente limitado às **ETAPAS 0
-a 7: fundação, dados, baseline, fine-tuning QLoRA, RAG local e SQLite**.
+a 8: fundação, dados, baseline, QLoRA, RAG, SQLite, LangChain e LangGraph**.
 
 > **Aviso:** Este sistema é um protótipo acadêmico e não deve ser utilizado para
 > diagnóstico, prescrição ou tomada autônoma de decisões clínicas.
@@ -23,8 +23,10 @@ a 7: fundação, dados, baseline, fine-tuning QLoRA, RAG local e SQLite**.
   embeddings multilíngues em CPU, ChromaDB persistente, retrieval e citações.
 - Implementado localmente: banco SQLite reproduzível com prontuários sintéticos
   pseudonimizados, repositório somente leitura e ferramentas controladas.
-- Não implementado: LangChain, LangGraph, guardrails em tempo de
-  execução, auditoria integrada, comparação de modelos e Streamlit.
+- Implementado localmente: ferramentas LangChain, contexto mínimo e StateGraph
+  com aresta condicional e interrupção/retomada para revisão humana.
+- Não implementado: guardrails completos, auditoria persistente, comparação de
+  modelos e Streamlit.
 - Modelo oficial: `Qwen/Qwen3-8B`, sem substituição silenciosa.
 
 ## Ambiente escolhido
@@ -36,7 +38,7 @@ a 7: fundação, dados, baseline, fine-tuning QLoRA, RAG local e SQLite**.
 - Fine-tuning em Linux com GPU no Google Colab; Kaggle como alternativa.
 
 As dependências estão separadas em `requirements/local.txt`,
-`requirements/dev.txt`, `requirements/rag-local.txt`,
+`requirements/dev.txt`, `requirements/rag-local.txt`, `requirements/agent-local.txt`,
 `requirements/gpu-colab-kaggle.txt` e `requirements/future-app.txt`. A pilha
 RAG é local e CPU-only; a pilha de treinamento remoto permanece separada.
 
@@ -210,14 +212,40 @@ python scripts\query_patient.py PAC004 pending-exams
 As consultas são fixas, parametrizadas e somente leitura. Não existe ferramenta
 para SQL arbitrário. Consulte `docs/stage_7_database.md`.
 
+## LangChain e LangGraph
+
+Instale a integração local e valide seus pré-requisitos:
+
+```powershell
+python -m pip install -r requirements\agent-local.txt
+python scripts\validate_agent_workflow.py
+```
+
+Consulta informativa, sem interrupção humana:
+
+```powershell
+python scripts\run_agent_workflow.py PAC004 "Quais exames estão pendentes?"
+```
+
+Consulta que solicita mudança clínica e percorre a aresta de revisão:
+
+```powershell
+python scripts\run_agent_workflow.py PAC004 "Devo alterar o medicamento?" --review reject
+```
+
+O grafo usa dados SQLite, retrieval com citações, contexto limitado, nove nós e
+uma aresta condicional real. O modo local é uma prévia determinística de
+orquestração; ele não executa nem simula silenciosamente o Qwen3-8B. Consulte
+`docs/stage_8_langgraph.md`.
+
 ## Testes
 
 ```powershell
 python -m pytest
 ```
 
-Os markers são `unit`, `integration`, `network` e `gpu`. Nesta entrega, os 69
-testes passaram em 18,49 segundos no Windows. Os testes locais não usam GPU;
+Os markers são `unit`, `integration`, `network` e `gpu`. Nesta entrega, os 80
+testes passaram em 164,30 segundos no Windows. Os testes locais não usam GPU;
 somente a instalação inicial do modelo de embeddings requer rede.
 
 ## Fontes
@@ -240,6 +268,6 @@ dos downloads antes de redistribuir os datasets.
 
 ## Próxima etapa (aguardando aprovação)
 
-A ETAPA 7 produz o banco SQLite e ferramentas controladas de paciente. A
-integração com LangChain/LangGraph não será iniciada sem nova aprovação
-explícita.
+A ETAPA 8 integra LangChain e LangGraph com revisão humana. A ETAPA 9, com
+guardrails completos, auditoria persistente e testes adversariais, não será
+iniciada sem nova aprovação explícita.

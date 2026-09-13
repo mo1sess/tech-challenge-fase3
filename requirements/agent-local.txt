@@ -1,0 +1,5 @@
+# ETAPAS 7-8 - LangChain + LangGraph local em CPU.
+-r rag-local.txt
+langchain==0.3.26
+langchain-community==0.3.26
+langgraph==0.4.8
