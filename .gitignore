@@ -32,6 +32,15 @@ outputs/**
 !outputs/**/.gitkeep
 !outputs/baseline/
 !outputs/baseline/**
+!outputs/training/
+!outputs/training/**/
+!outputs/training/**/run_manifest.json
+!outputs/training/**/run_status.json
+!outputs/training/**/train_metrics.json
+!outputs/training/**/validation_metrics.json
+!outputs/training/**/inference_smoke.json
+!outputs/training/**/log_history.jsonl
+!outputs/training/**/adapter_config.json
 
 # Model artifacts and caches.
 *.safetensors

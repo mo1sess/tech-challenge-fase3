@@ -1,0 +1,183 @@
+{
+  "artifact_sha256": {
+    "adapter/README.md": "f10ccea38e39812b321d51cdcc0df425cde84e4dafb0ccd010f7afc319d59c24",
+    "adapter/adapter_config.json": "32f3f5c6df77fabd43bbb97f35b01f5ea93535f6fd99a122a4b1e6f9b64f85a4",
+    "adapter/adapter_model.safetensors": "d744bf09a8d7bbe1018ce48091429d82361f72f7c9e34e2a6f8f89d45e1855e3",
+    "adapter/added_tokens.json": "c0284b582e14987fbd3d5a2cb2bd139084371ed9acbae488829a1c900833c680",
+    "adapter/chat_template.jinja": "a55ee1b1660128b7098723e0abcd92caa0788061051c62d51cbe87d9cf1974d8",
+    "adapter/merges.txt": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+    "adapter/special_tokens_map.json": "a5dba86f1cb07d7e5b093bbea2339d2c3c4effec4d6a76d812a7271897bd151a",
+    "adapter/tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+    "adapter/tokenizer_config.json": "443bfa629eb16387a12edbf92a76f6a6f10b2af3b53d87ba1550adfcf45f7fa0",
+    "adapter/vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910",
+    "checkpoints/README.md": "787e542a4c90e67c3fa63cd9d0a801eb1d951846356ad17c2b0fedc65cb4f44e",
+    "checkpoints/checkpoint-100/README.md": "f10ccea38e39812b321d51cdcc0df425cde84e4dafb0ccd010f7afc319d59c24",
+    "checkpoints/checkpoint-100/adapter_config.json": "32f3f5c6df77fabd43bbb97f35b01f5ea93535f6fd99a122a4b1e6f9b64f85a4",
+    "checkpoints/checkpoint-100/adapter_model.safetensors": "d744bf09a8d7bbe1018ce48091429d82361f72f7c9e34e2a6f8f89d45e1855e3",
+    "checkpoints/checkpoint-100/added_tokens.json": "c0284b582e14987fbd3d5a2cb2bd139084371ed9acbae488829a1c900833c680",
+    "checkpoints/checkpoint-100/chat_template.jinja": "a55ee1b1660128b7098723e0abcd92caa0788061051c62d51cbe87d9cf1974d8",
+    "checkpoints/checkpoint-100/merges.txt": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+    "checkpoints/checkpoint-100/optimizer.pt": "db6f255e77fc07bf64d5dbe68ff42c48ea4b10f7c272f73ba24aaf8f6bc864cc",
+    "checkpoints/checkpoint-100/rng_state.pth": "03bbc8a32c93347ea79d0a0b6d1474018e2dfbf44baec9ce6cae29cf6c81f8e5",
+    "checkpoints/checkpoint-100/scaler.pt": "c4393a84a3109995aa1202073b039b12062e3189ed89aa0b94ef0510ba843009",
+    "checkpoints/checkpoint-100/scheduler.pt": "76a2417c552f2bdc77f02e5895b11a8ab016d87e3e5eb1ba1c862a4cfd0fd110",
+    "checkpoints/checkpoint-100/special_tokens_map.json": "a5dba86f1cb07d7e5b093bbea2339d2c3c4effec4d6a76d812a7271897bd151a",
+    "checkpoints/checkpoint-100/tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+    "checkpoints/checkpoint-100/tokenizer_config.json": "443bfa629eb16387a12edbf92a76f6a6f10b2af3b53d87ba1550adfcf45f7fa0",
+    "checkpoints/checkpoint-100/trainer_state.json": "a557fefa2582e655c1b911daea52929252b801f9015d126e6e1f70b2957da5cd",
+    "checkpoints/checkpoint-100/training_args.bin": "0d9cabdb83301c8538cd6d4567ba3197d23fc7738311cb4d74fedbf04076d28f",
+    "checkpoints/checkpoint-100/vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910",
+    "checkpoints/checkpoint-80/README.md": "f10ccea38e39812b321d51cdcc0df425cde84e4dafb0ccd010f7afc319d59c24",
+    "checkpoints/checkpoint-80/adapter_config.json": "32f3f5c6df77fabd43bbb97f35b01f5ea93535f6fd99a122a4b1e6f9b64f85a4",
+    "checkpoints/checkpoint-80/adapter_model.safetensors": "1239414bae2778a70f83bf6e130d30c75699ce2b4f79ed8243e21df3e63624e5",
+    "checkpoints/checkpoint-80/added_tokens.json": "c0284b582e14987fbd3d5a2cb2bd139084371ed9acbae488829a1c900833c680",
+    "checkpoints/checkpoint-80/chat_template.jinja": "a55ee1b1660128b7098723e0abcd92caa0788061051c62d51cbe87d9cf1974d8",
+    "checkpoints/checkpoint-80/merges.txt": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+    "checkpoints/checkpoint-80/optimizer.pt": "54d37baf0e68523d6f7991a9e423a80008a77f13ee9bda8e073e04759ccc89e4",
+    "checkpoints/checkpoint-80/rng_state.pth": "6dd57a9e22344344b98593542f6bf40e5e32891327ff832db3b82adc6a97a4ab",
+    "checkpoints/checkpoint-80/scaler.pt": "254aa974d264413ca1b60d5980136d8531f6cb9e9b28340b9a2daa2496d48c4c",
+    "checkpoints/checkpoint-80/scheduler.pt": "384fbc93ceaa49fb465db7d38642b4f29f828533eda030b2c318cd5ab9d75cf4",
+    "checkpoints/checkpoint-80/special_tokens_map.json": "a5dba86f1cb07d7e5b093bbea2339d2c3c4effec4d6a76d812a7271897bd151a",
+    "checkpoints/checkpoint-80/tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+    "checkpoints/checkpoint-80/tokenizer_config.json": "443bfa629eb16387a12edbf92a76f6a6f10b2af3b53d87ba1550adfcf45f7fa0",
+    "checkpoints/checkpoint-80/trainer_state.json": "56e52d9c3d8be38249fe995e84721f216cb97d52eda84059870084f433c3e6ef",
+    "checkpoints/checkpoint-80/training_args.bin": "0d9cabdb83301c8538cd6d4567ba3197d23fc7738311cb4d74fedbf04076d28f",
+    "checkpoints/checkpoint-80/vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910",
+    "checkpoints/trainer_state.json": "767454cf9cfa3da1c3a0ebbf032669a408be53081ed3077edeaab046e9e52451",
+    "inference_smoke.json": "fda766ed453fa0980c82dbb61976daf18c710ac74ea97c9e917d4e2a9f222ae2",
+    "log_history.jsonl": "0f07c14f28c813936f7a7db759249994984e0b4e7feaa74638dcb0b2e129dee5",
+    "run_status.json": "386d6f1934748728cf98c27a82a51b8af476a4ecd45e8d6dc1bbedf14bd4a738",
+    "train_metrics.json": "92940c472438d5723e5ada12dec0abf465fd8a0a034f96eab10c08c5334ed58b",
+    "validation_metrics.json": "951a201de86e03b580cd45b72f9b8a4a0390645e60caaa4478aba9fc68ac147d"
+  },
+  "complete": true,
+  "config_sha256": "2cfb2bc78e0d3dd1832306385690cd58f0085296c3de8b787e7971ccf7fa9cdd",
+  "dataset": {
+    "categories": {
+      "test": {
+        "faq": 2,
+        "prescription_behavior": 1,
+        "procedure": 1,
+        "protocol": 1,
+        "report": 1,
+        "safety": 2
+      },
+      "train": {
+        "faq": 16,
+        "prescription_behavior": 10,
+        "procedure": 13,
+        "protocol": 13,
+        "report": 10,
+        "safety": 16
+      },
+      "validation": {
+        "faq": 2,
+        "prescription_behavior": 1,
+        "procedure": 1,
+        "protocol": 1,
+        "report": 1,
+        "safety": 2
+      }
+    },
+    "counts": {
+      "test": 8,
+      "train": 78,
+      "validation": 8
+    },
+    "errors": [],
+    "ok": true,
+    "stage": 5,
+    "total_records": 94,
+    "unique_content_hashes": 94
+  },
+  "dataset_manifest_sha256": "6d6a421251c25f4e924178e4b7708371963383385f0b3a2ac0156be53d74d709",
+  "environment": {
+    "accelerate": "1.8.1",
+    "bitsandbytes": "0.46.0",
+    "compute_capability": "7.5",
+    "cuda_runtime": "12.8",
+    "datasets": "3.6.0",
+    "gpu_name": "Tesla T4",
+    "gpu_vram_gb": 14.56317138671875,
+    "peft": "0.16.0",
+    "python": "3.12.13",
+    "torch": "2.11.0+cu128",
+    "transformers": "4.53.2",
+    "trl": "0.19.1"
+  },
+  "generated_at_utc": "2026-09-13T15:34:05.815442+00:00",
+  "limitations": [
+    "Fine-tuning on synthetic academic hospital data is not clinical validation.",
+    "The adapter requires the exact pinned Qwen3-8B base revision.",
+    "Comparison against the baseline is reserved for a later evaluation stage."
+  ],
+  "lora": {
+    "alpha": 32,
+    "bias": "none",
+    "dropout": 0.05,
+    "r": 16,
+    "target_modules": [
+      "q_proj",
+      "k_proj",
+      "v_proj",
+      "o_proj",
+      "gate_proj",
+      "up_proj",
+      "down_proj"
+    ]
+  },
+  "metrics": {
+    "train": {
+      "total_flos": 2737370192332800.0,
+      "train_loss": 0.7151643044652883,
+      "train_runtime": 779.7304,
+      "train_samples_per_second": 0.5,
+      "train_steps_per_second": 0.128
+    },
+    "validation": {
+      "eval_loss": 0.05323869362473488,
+      "eval_runtime": 5.902,
+      "eval_samples_per_second": 1.355,
+      "eval_steps_per_second": 1.355
+    }
+  },
+  "model": {
+    "adapter": "adapter",
+    "id": "Qwen/Qwen3-8B",
+    "revision": "b968826d9c46dd6066d109eabc6255188de91218"
+  },
+  "peak_gpu_memory_gb": 9.969053268432617,
+  "quantization": {
+    "compute_dtype": "float16",
+    "double_quant": true,
+    "effective_compute_dtype": "torch.float16",
+    "load_in_4bit": true,
+    "quant_type": "nf4"
+  },
+  "run_type": "official_qlora_training",
+  "schema_version": 1,
+  "stage": 5,
+  "trainable_parameters": {
+    "total": 4761498624,
+    "trainable": 43646976,
+    "trainable_percent": 0.9166646773770022
+  },
+  "training": {
+    "eval_strategy": "epoch",
+    "gradient_accumulation_steps": 4,
+    "gradient_checkpointing": true,
+    "learning_rate": 0.0002,
+    "logging_steps": 1,
+    "lr_scheduler_type": "cosine",
+    "max_grad_norm": 0.3,
+    "max_length": 512,
+    "num_train_epochs": 5,
+    "optim": "paged_adamw_8bit",
+    "packing": false,
+    "per_device_eval_batch_size": 1,
+    "per_device_train_batch_size": 1,
+    "save_strategy": "epoch",
+    "save_total_limit": 2,
+    "warmup_ratio": 0.1
+  }
+}

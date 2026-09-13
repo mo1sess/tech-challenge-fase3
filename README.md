@@ -17,8 +17,8 @@ a 5: fundação, dados, baseline e preparação do fine-tuning QLoRA**.
 - Concluído em GPU remota: baseline reproduzível do Qwen3-8B com 24 casos
   separados, execução oficial completa e evidências preservadas em
   `outputs/baseline/baseline-20260913T143007Z`.
-- Implementado, aguardando execução remota: pipeline QLoRA, dataset
-  estratificado, validação, adapter separado, métricas, logs e notebook Colab.
+- Concluído em GPU remota: fine-tuning QLoRA real do Qwen3-8B, dataset
+  estratificado, validação, adapter separado, métricas, logs e hashes.
 - Não implementado: SQLite, RAG, LangChain, LangGraph, guardrails em tempo de
   execução, auditoria, comparação de modelos e Streamlit.
 - Modelo oficial: `Qwen/Qwen3-8B`, sem substituição silenciosa.
@@ -142,10 +142,17 @@ O dataset usa os 94 exemplos sintéticos internos e produz uma divisão
 estratificada com 78 registros de treino, 8 de validação e 8 de teste. Os 24
 casos da avaliação permanecem reservados, com zero coincidências exatas.
 
-O treinamento real deve ser executado em GPU remota pelo notebook
+O treinamento real foi executado em GPU remota pelo notebook
 `notebooks/05_finetuning.ipynb`. O pipeline usa QLoRA 4-bit NF4, mantém o
 Qwen3-8B imutável e salva o adapter LoRA separadamente, além de losses, métricas,
 logs, hashes e um teste de inferência. Consulte `docs/stage_5_qlora.md`.
+
+Resultado medido: 5 épocas e 100 passos em 779,73 segundos, training loss
+agregada de 0,7152, validation loss final de 0,0532 e pico de 9,97 GB de VRAM
+em uma Tesla T4. Foram treinados 43.646.976 parâmetros, 0,9167% do total. O
+adapter final tem 166,56 MiB e permanece separado da revisão fixada do modelo
+base. Esses números demonstram execução, não correção clínica; o conjunto
+pequeno apresenta risco de memorização.
 
 ## Testes
 
@@ -174,9 +181,8 @@ dos downloads antes de redistribuir os datasets.
   pode ser apresentado como protocolo real.
 - Resultados e quantidades só são documentados quando medidos por execução.
 
-## Próxima etapa (bloqueada)
+## Próxima etapa (aguardando aprovação)
 
-A implementação local da ETAPA 5 está pronta, mas o fine-tuning ainda precisa
-ser realmente executado no Colab. A ETAPA 6 (RAG) permanece bloqueada até o
-treinamento produzir `complete: true`, o adapter e as evidências serem
-preservados e houver nova aprovação explícita.
+A ETAPA 5 produziu `complete: true`, adapter funcional e evidências validadas.
+A ETAPA 6 (RAG) está tecnicamente desbloqueada, mas não será iniciada sem nova
+aprovação explícita.

@@ -2,9 +2,39 @@
 
 ## Estado
 
-**Pipeline implementado; treinamento remoto real pendente.** A etapa somente
-será declarada concluída quando o notebook terminar, produzir
-`complete: true` e o adapter e as evidências forem preservados.
+**Concluída.** O treinamento remoto real produziu `complete: true`; o adapter,
+os checkpoints, as métricas, os logs e os hashes foram preservados em
+`outputs/training/training-20260913T151805Z`.
+
+## Resultado oficial medido
+
+- Execução: `official_qlora_training`, `complete: true`.
+- Modelo base: `Qwen/Qwen3-8B`, revisão
+  `b968826d9c46dd6066d109eabc6255188de91218`.
+- Dados: 78 exemplos de treino, 8 de validação e 8 de teste.
+- Épocas: 5; passos registrados: 100.
+- Training loss agregada: 0,7152.
+- Validation loss final: 0,0532.
+- Tempo de treino: 779,73 segundos.
+- Parâmetros treináveis: 43.646.976, equivalentes a 0,9167% do total.
+- Pico de memória: 9,97 GB em uma Tesla T4 com 14,56 GB.
+- Adapter final: 166,56 MiB.
+- SHA-256 do adapter final:
+  `d744bf09a8d7bbe1018ce48091429d82361f72f7c9e34e2a6f8f89d45e1855e3`.
+- SHA-256 do ZIP original:
+  `62c7bba0d4fb58c2740f19f3d0cd014bebc215d80621c7fbc238203c680a00e6`.
+
+| Época | Validation loss | Acurácia média de token |
+|---:|---:|---:|
+| 1 | 1,4652 | 0,6465 |
+| 2 | 0,7139 | 0,8270 |
+| 3 | 0,1567 | 0,9551 |
+| 4 | 0,0805 | 0,9791 |
+| 5 | 0,0532 | 0,9855 |
+
+Todos os 49 artefatos declarados no manifesto foram encontrados e tiveram seus
+hashes recalculados sem divergência. O smoke test pós-treino recusou prescrição
+e dose autônomas e informou: "Validação médica necessária."
 
 ## Requisito acadêmico atendido pelo desenho
 
@@ -75,7 +105,7 @@ substitui revisão clínica ou humana.
 - O adapter só é compatível com o modelo e a revisão registrados.
 - A comparação quantitativa baseline versus fine-tuned pertence à ETAPA 10.
 
-## Próximo passo bloqueado
+## Próximo passo
 
-A ETAPA 6 não deve começar antes de o treinamento real terminar e suas
-evidências serem validadas e preservadas.
+O pré-requisito técnico da ETAPA 6 foi atendido. A etapa RAG permanece
+aguardando aprovação explícita antes de qualquer implementação.
