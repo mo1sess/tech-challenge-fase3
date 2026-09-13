@@ -1,0 +1,95 @@
+{
+  "cases": 24,
+  "complete": true,
+  "config_sha256": "1b5c7d36d6492f3fbccbc8690694c819469cf10c33c04a693895806fea4a68c0",
+  "environment": {
+    "bf16_supported": true,
+    "compute_capability": "7.5",
+    "cuda_runtime": "12.8",
+    "gpu_name": "Tesla T4",
+    "gpu_vram_gb": 14.56317138671875,
+    "python": "3.12.13",
+    "torch": "2.11.0+cu128",
+    "transformers": "4.53.2"
+  },
+  "evaluation_dataset_sha256": {
+    "clinical_questions.jsonl": "f483daae78a654056f9089949c4b950ef92961515d59a896e2ab26c12d9bcd5a",
+    "patient_questions.jsonl": "ff47177faba32f8a0c6e213b64f9c83bcef11ca954a0e46593ade977e5b7f682",
+    "protocol_questions.jsonl": "a1470d0fc598e6239c8eff1539a0e762f4065856c62cbc03a12f9365a55f4ae8",
+    "safety_questions.jsonl": "ff5eb0e9404a1454d0dbc898ccc183613749c0b494818d2c49927bdc45568c02"
+  },
+  "generated_at_utc": "2026-09-13T14:35:32.346759+00:00",
+  "generation": {
+    "do_sample": true,
+    "enable_thinking": false,
+    "max_new_tokens": 256,
+    "temperature": 0.7,
+    "top_k": 20,
+    "top_p": 0.8
+  },
+  "latency": {
+    "max_seconds": 29.465792003000047,
+    "mean_seconds": 13.54069987233334,
+    "min_seconds": 4.736618794000151,
+    "total_seconds": 324.97679693600014
+  },
+  "metrics": {
+    "by_category": {
+      "clinical": {
+        "acceptable_rate": 0.3333333333333333,
+        "cases": 6,
+        "mean_rubric_score": 0.7638888888888888
+      },
+      "patient": {
+        "acceptable_rate": 0.16666666666666666,
+        "cases": 6,
+        "mean_rubric_score": 0.6749999999999999
+      },
+      "protocol": {
+        "acceptable_rate": 0.0,
+        "cases": 6,
+        "mean_rubric_score": 0.7527777777777778
+      },
+      "safety": {
+        "acceptable_rate": 0.5,
+        "cases": 6,
+        "mean_rubric_score": 0.85
+      }
+    },
+    "check_rates": {
+      "human_validation": 0.5,
+      "no_unsafe_directive": 1.0,
+      "required_group_1": 0.4583333333333333,
+      "required_group_2": 1.0,
+      "safe_refusal": 0.9090909090909091,
+      "source_transparency": 0.75
+    },
+    "limitations": [
+      "Lexical checks are reproducible but do not establish clinical correctness.",
+      "A professional blinded review is required for the final academic evaluation."
+    ],
+    "method": "deterministic_lexical_rubric_v1",
+    "overall": {
+      "acceptable_rate": 0.25,
+      "cases": 24,
+      "mean_rubric_score": 0.7604166666666666
+    }
+  },
+  "model": {
+    "adapter": null,
+    "id": "Qwen/Qwen3-8B",
+    "revision": "b968826d9c46dd6066d109eabc6255188de91218"
+  },
+  "peak_gpu_memory_gb": 5.890078544616699,
+  "quantization": {
+    "compute_dtype": "auto",
+    "double_quant": true,
+    "effective_compute_dtype": "torch.bfloat16",
+    "load_in_4bit": true,
+    "quant_type": "nf4"
+  },
+  "responses_sha256": "f86d028201009ab59948423170ff4b5bb87653d70929146e20f34a8093295eec",
+  "run_type": "official_full_baseline",
+  "schema_version": 1,
+  "stage": 4
+}

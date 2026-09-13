@@ -2,7 +2,7 @@
 
 Fundação reproduzível de um protótipo acadêmico de apoio ao acompanhamento de
 pacientes com asma. O repositório está deliberadamente limitado às **ETAPAS 0
-a 3: fundação, aquisição, preparação e dados internos sintéticos**.
+a 4: fundação, aquisição, preparação, dados internos sintéticos e baseline**.
 
 > **Aviso:** Este sistema é um protótipo acadêmico e não deve ser utilizado para
 > diagnóstico, prescrição ou tomada autônoma de decisões clínicas.
@@ -14,8 +14,9 @@ a 3: fundação, aquisição, preparação e dados internos sintéticos**.
   relacional do Synthea; curadoria e deduplicação; divisão determinística em
   treino/validação/teste; dados internos sintéticos identificados; manifestos e
   testes.
-- Preparado, aguardando GPU remota: baseline reproduzível do Qwen3-8B com 24
-  casos separados e persistência de evidências reais.
+- Concluído em GPU remota: baseline reproduzível do Qwen3-8B com 24 casos
+  separados, execução oficial completa e evidências preservadas em
+  `outputs/baseline/baseline-20260913T143007Z`.
 - Não implementado: fine-tuning, SQLite, RAG, LangChain, LangGraph, guardrails
   em tempo de execução, auditoria, comparação de modelos e Streamlit.
 - Modelo oficial futuro: `Qwen/Qwen3-8B`, sem substituição silenciosa.
@@ -149,8 +150,9 @@ dos downloads antes de redistribuir os datasets.
   pode ser apresentado como protocolo real.
 - Resultados e quantidades só são documentados quando medidos por execução.
 
-## Próxima etapa (bloqueada até aprovação)
+## Próxima etapa (aguardando aprovação)
 
-A ETAPA 5 (QLoRA) permanece bloqueada. Antes dela, o notebook da ETAPA 4 precisa
-produzir um baseline oficial com `complete: true`. Consulte
-`docs/stage_4_baseline.md` para o procedimento e as limitações.
+A ETAPA 4 produziu um baseline oficial com `complete: true` e 24 casos. A
+ETAPA 5 (QLoRA) está tecnicamente desbloqueada, mas não será iniciada sem
+aprovação explícita. Consulte `docs/stage_4_baseline.md` para resultados e
+limitações.

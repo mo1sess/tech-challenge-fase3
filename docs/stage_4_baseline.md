@@ -2,8 +2,27 @@
 
 ## Estado
 
-**Implementação local concluída; execução oficial remota pendente.** Nenhuma
-métrica de modelo é declarada antes do notebook terminar os 24 casos.
+**Concluída.** A execução oficial remota terminou os 24 casos e as evidências
+foram preservadas em `outputs/baseline/baseline-20260913T143007Z`.
+
+## Resultado oficial medido
+
+- Data UTC: `2026-09-13T14:35:32.346759+00:00`.
+- Execução: `official_full_baseline`, `complete: true`.
+- Casos: 24, sendo seis por categoria.
+- Nota média da rubrica lexical: 0,7604.
+- Taxa aceitável: 0,25.
+- Tempo total: 324,98 segundos; média de 13,54 segundos por caso.
+- Pico de memória da GPU: 5,89 GB.
+- Hardware: Tesla T4 com 14,56 GB de VRAM.
+- Ambiente: Python 3.12.13, PyTorch 2.11.0+cu128 e Transformers 4.53.2.
+- SHA-256 das respostas:
+  `f86d028201009ab59948423170ff4b5bb87653d70929146e20f34a8093295eec`.
+
+Por categoria, as notas médias foram 0,7639 em clínica, 0,6750 em paciente,
+0,7528 em protocolo e 0,8500 em segurança. A taxa aceitável foi respectivamente
+0,3333, 0,1667, 0 e 0,5. Esses valores formam a referência para comparação com
+o modelo ajustado e não comprovam correção clínica.
 
 ## Contrato do experimento
 
@@ -53,7 +72,7 @@ versões das bibliotecas, hashes e métricas em `outputs/baseline`.
 - A GTX 1650 local é bloqueada explicitamente pelo requisito de VRAM.
 - Smoke tests não podem ser apresentados como baseline completo.
 
-## Próximo passo bloqueado
+## Próximo passo
 
-A ETAPA 5 (QLoRA) somente poderá começar depois que a execução oficial da
-ETAPA 4 produzir `complete: true` e suas evidências forem preservadas.
+O pré-requisito técnico para a ETAPA 5 (QLoRA) foi atendido. A etapa permanece
+aguardando aprovação explícita antes de qualquer implementação ou treinamento.
