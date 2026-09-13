@@ -14,8 +14,10 @@ a 3: fundação, aquisição, preparação e dados internos sintéticos**.
   relacional do Synthea; curadoria e deduplicação; divisão determinística em
   treino/validação/teste; dados internos sintéticos identificados; manifestos e
   testes.
-- Não implementado: baseline, fine-tuning, SQLite, RAG, LangChain, LangGraph,
-  guardrails em tempo de execução, auditoria, avaliação de modelo e Streamlit.
+- Preparado, aguardando GPU remota: baseline reproduzível do Qwen3-8B com 24
+  casos separados e persistência de evidências reais.
+- Não implementado: fine-tuning, SQLite, RAG, LangChain, LangGraph, guardrails
+  em tempo de execução, auditoria, comparação de modelos e Streamlit.
 - Modelo oficial futuro: `Qwen/Qwen3-8B`, sem substituição silenciosa.
 
 ## Ambiente escolhido
@@ -103,14 +105,31 @@ O material ensina comportamento institucional, rastreabilidade e limites de
 atuação. Ele não contém dose, prescrição real, diagnóstico novo ou recomendação
 clínica sem fonte.
 
+## Baseline remoto do Qwen3-8B
+
+O baseline usa o modelo e a revisão fixados em `configs/baseline.yaml`, sem
+adapter, com quantização 4-bit NF4. O conjunto separado possui 24 perguntas,
+seis em cada categoria: clínica, protocolo, paciente e segurança.
+
+Validação local:
+
+```powershell
+python scripts\validate_evaluation_data.py
+```
+
+A execução oficial deve ser feita em GPU remota pelo notebook
+`notebooks/04_baseline_evaluation.ipynb`. Primeiro execute o smoke test de dois
+casos e depois a execução completa, sem `--limit`. As evidências são gravadas
+em `outputs/baseline`.
+
 ## Testes
 
 ```powershell
 python -m pytest
 ```
 
-Os markers são `unit`, `integration`, `network` e `gpu`. Os 31 testes das ETAPAS
-0–3 são locais e não usam rede nem GPU.
+Os markers são `unit`, `integration`, `network` e `gpu`. Os 41 testes locais não
+usam rede nem GPU; a execução pesada permanece separada.
 
 ## Fontes
 
@@ -132,6 +151,6 @@ dos downloads antes de redistribuir os datasets.
 
 ## Próxima etapa (bloqueada até aprovação)
 
-A ETAPA 4 (baseline do `Qwen/Qwen3-8B`) permanece bloqueada. Nenhum modelo foi
-baixado ou executado nesta entrega. Consulte `docs/stage_3_report.md` para os
-resultados e limitações.
+A ETAPA 5 (QLoRA) permanece bloqueada. Antes dela, o notebook da ETAPA 4 precisa
+produzir um baseline oficial com `complete: true`. Consulte
+`docs/stage_4_baseline.md` para o procedimento e as limitações.

@@ -57,3 +57,16 @@ Total medido: 94 registros, 94 IDs únicos e 94 hashes de conteúdo únicos.
 Todos possuem aviso acadêmico, fonte fictícia, versão, seção e indicador
 de validação humana. Os protocolos `ASM-001` a `ASM-005` descrevem fluxos
 operacionais e de segurança; não constituem diretriz clínica real.
+
+## Conjunto reservado para baseline
+
+| Categoria | Perguntas |
+|---|---:|
+| Clínica | 6 |
+| Protocolo | 6 |
+| Paciente | 6 |
+| Segurança | 6 |
+
+As 24 perguntas são versionadas em `data/evaluation`. A verificação encontrou
+24 IDs e textos únicos e zero coincidências exatas com as instruções de treino
+disponíveis. O conjunto não deve ser incorporado ao fine-tuning.

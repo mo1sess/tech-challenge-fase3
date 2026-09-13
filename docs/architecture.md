@@ -31,3 +31,8 @@ RAG, LangChain, LangGraph, segurança, auditoria, avaliação e interface.
 
 O modelo oficial permanece `Qwen/Qwen3-8B`. Seu treinamento QLoRA será remoto
 em Google Colab ou Kaggle e não é implementado nesta etapa.
+
+A ETAPA 4 mantém um runner de baseline separado do futuro treinamento. Ele
+carrega a revisão fixada do Qwen3-8B em 4 bits, executa o conjunto reservado,
+grava respostas e telemetria e calcula uma rubrica lexical auditável. A camada
+local valida os dados e o código; somente o runner remoto importa a pilha CUDA.

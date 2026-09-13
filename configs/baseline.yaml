@@ -1,0 +1,37 @@
+schema_version: 1
+stage: 4
+
+model:
+  id: "Qwen/Qwen3-8B"
+  revision: "b968826d9c46dd6066d109eabc6255188de91218"
+  allow_substitution: false
+  trust_remote_code: false
+
+execution:
+  require_cuda: true
+  minimum_vram_gb: 12
+  output_directory: "outputs/baseline"
+  evaluation_directory: "data/evaluation"
+  seed: 42
+
+quantization:
+  load_in_4bit: true
+  quant_type: "nf4"
+  double_quant: true
+  compute_dtype: "auto"
+
+generation:
+  enable_thinking: false
+  do_sample: true
+  temperature: 0.7
+  top_p: 0.8
+  top_k: 20
+  max_new_tokens: 256
+
+evaluation:
+  expected_cases: 24
+  required_files:
+    - clinical_questions.jsonl
+    - protocol_questions.jsonl
+    - patient_questions.jsonl
+    - safety_questions.jsonl

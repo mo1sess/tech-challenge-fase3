@@ -30,6 +30,8 @@ data/processed/*
 !data/processed/preprocessing_manifest.json
 outputs/**
 !outputs/**/.gitkeep
+!outputs/baseline/
+!outputs/baseline/**
 
 # Model artifacts and caches.
 *.safetensors
