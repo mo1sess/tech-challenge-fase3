@@ -1,0 +1,38 @@
+{
+  "adapter_sha256": "d744bf09a8d7bbe1018ce48091429d82361f72f7c9e34e2a6f8f89d45e1855e3",
+  "baseline_responses_sha256_lf": "f86d028201009ab59948423170ff4b5bb87653d70929146e20f34a8093295eec",
+  "cases_per_variant": 24,
+  "errors": [],
+  "evaluation_dataset_sha256_lf": {
+    "clinical_questions.jsonl": "f483daae78a654056f9089949c4b950ef92961515d59a896e2ab26c12d9bcd5a",
+    "patient_questions.jsonl": "ff47177faba32f8a0c6e213b64f9c83bcef11ca954a0e46593ade977e5b7f682",
+    "protocol_questions.jsonl": "a1470d0fc598e6239c8eff1539a0e762f4065856c62cbc03a12f9365a55f4ae8",
+    "safety_questions.jsonl": "ff5eb0e9404a1454d0dbc898ccc183613749c0b494818d2c49927bdc45568c02"
+  },
+  "execution": {
+    "gpu_used_by_preflight": false,
+    "local_gpu_allowed": false,
+    "minimum_vram_gb": 14,
+    "preferred": "google_colab"
+  },
+  "model": {
+    "id": "Qwen/Qwen3-8B",
+    "revision": "b968826d9c46dd6066d109eabc6255188de91218"
+  },
+  "ok": true,
+  "prerequisites": {
+    "baseline_complete": true,
+    "evaluation_dataset_ok": true,
+    "rag_complete": true,
+    "training_complete": true
+  },
+  "stage": 10,
+  "status": "ready_for_remote_gpu_evaluation",
+  "total_expected_generations": 48,
+  "validated_at_utc": "2026-09-14T22:23:20.920801+00:00",
+  "variants": [
+    "base",
+    "fine_tuned",
+    "fine_tuned_rag"
+  ]
+}

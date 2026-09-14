@@ -87,5 +87,5 @@ e nenhum Qwen3-8B foram usados nesta etapa.
 
 ## Próximo passo
 
-A ETAPA 10 fará a comparação formal entre baseline e modelo ajustado somente
-após aprovação explícita.
+A ETAPA 10 foi aprovada e possui pipeline de avaliação separado. Seus resultados
+dependem da execução oficial em GPU remota.

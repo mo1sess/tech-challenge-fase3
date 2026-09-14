@@ -2,8 +2,8 @@
 
 Fundação reproduzível de um protótipo acadêmico de apoio ao acompanhamento de
 pacientes com asma. O repositório está deliberadamente limitado às **ETAPAS 0
-a 9: fundação, dados, baseline, QLoRA, RAG, SQLite, LangChain, LangGraph,
-segurança e auditoria**.
+a 10: fundação, dados, baseline, QLoRA, RAG, SQLite, LangChain, LangGraph,
+segurança, auditoria e avaliação comparativa**.
 
 > **Aviso:** Este sistema é um protótipo acadêmico e não deve ser utilizado para
 > diagnóstico, prescrição ou tomada autônoma de decisões clínicas.
@@ -29,7 +29,9 @@ segurança e auditoria**.
 - Implementado localmente: guardrails de entrada e saída, bloqueio antes do
   acesso aos dados, log JSONL append-only encadeado por SHA-256 e suíte
   adversarial reproduzível.
-- Não implementado: comparação formal de modelos e Streamlit.
+- Preparado para GPU remota: comparação formal do modelo base, fine-tuned e
+  fine-tuned + RAG. Os resultados B/C aguardam execução real no Colab.
+- Não implementado: Streamlit e pacote final de entrega.
 - Modelo oficial: `Qwen/Qwen3-8B`, sem substituição silenciosa.
 
 ## Ambiente escolhido
@@ -269,14 +271,46 @@ e não é versionado porque pode conter perguntas e pseudônimos; somente o
 relatório de validação entra no Git. Consulte
 `docs/stage_9_safety_audit.md`.
 
+## Avaliação comparativa de modelos
+
+O pré-flight local confirma os artefatos oficiais e não carrega a LLM:
+
+```powershell
+& .\.venv\Scripts\python.exe scripts\validate_model_evaluation.py
+```
+
+A avaliação completa deve ser executada em Tesla T4 pelo notebook
+`notebooks/06_model_evaluation.ipynb`. Faça upload do ZIP de evidências da
+ETAPA 5 quando solicitado. O runner verifica o hash do adapter antes de gerar
+qualquer resposta.
+
+A mesma revisão do Qwen3-8B, os mesmos 24 casos reservados, as mesmas sementes
+e a mesma configuração de geração são usados em três variantes:
+
+1. baseline oficial já medido;
+2. Qwen3-8B com adapter QLoRA;
+3. Qwen3-8B com adapter QLoRA e os cinco protocolos do RAG.
+
+O notebook executa primeiro um smoke test e depois 48 gerações oficiais, salva
+respostas e hashes, calcula métricas e produz `comparison.md`. Depois de baixar
+e importar o ZIP, valide-o localmente com:
+
+```powershell
+& .\.venv\Scripts\python.exe scripts\validate_model_evaluation.py --run outputs\evaluation\evaluation-AAAAMMDDTHHMMSSZ
+```
+
+O pré-flight não é um resultado comparativo. Nenhuma métrica das variantes
+ajustadas deve ser declarada antes da execução real. Consulte
+`docs/evaluation.md` e `docs/stage_10_evaluation.md`.
+
 ## Testes
 
 ```powershell
 python -m pytest
 ```
 
-Os markers são `unit`, `integration`, `network` e `gpu`. Nesta entrega, os 100
-testes passaram em 72,46 segundos no Windows. Os testes locais não usam GPU;
+Os markers são `unit`, `integration`, `network` e `gpu`. Nesta entrega, os 110
+testes passaram em 196,99 segundos no Windows. Os testes locais não usam GPU;
 somente a instalação inicial do modelo de embeddings requer rede.
 
 ## Fontes
@@ -299,6 +333,6 @@ dos downloads antes de redistribuir os datasets.
 
 ## Próxima etapa (aguardando aprovação)
 
-A ETAPA 9 implementa segurança, auditoria e testes adversariais. A ETAPA 10,
-com avaliação comparativa do baseline e do modelo ajustado, não será iniciada
-sem nova aprovação explícita.
+A ETAPA 10 está pronta para a execução oficial em GPU remota. A ETAPA 11
+(Streamlit) e a ETAPA 12 (entrega final) não serão iniciadas antes da importação
+e validação dos resultados reais desta comparação.

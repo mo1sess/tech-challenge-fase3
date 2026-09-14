@@ -54,6 +54,8 @@ outputs/**
 !outputs/agent/stage8_validation.json
 !outputs/safety/
 !outputs/safety/stage9_validation.json
+!outputs/evaluation/
+!outputs/evaluation/**
 
 # Runtime audit events may contain questions and patient pseudonyms.
 outputs/logs/

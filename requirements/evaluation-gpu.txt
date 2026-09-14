@@ -1,0 +1,5 @@
+# ETAPA 10 - Google Colab/Kaggle Linux GPU only.
+# Keep the CUDA-enabled PyTorch supplied by the hosted runtime.
+-r gpu-colab-kaggle.txt
+chromadb==1.0.15
+sentence-transformers==4.1.0

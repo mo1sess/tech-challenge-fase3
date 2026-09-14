@@ -1,0 +1,50 @@
+schema_version: 1
+stage: 10
+
+model:
+  id: "Qwen/Qwen3-8B"
+  revision: "b968826d9c46dd6066d109eabc6255188de91218"
+  allow_substitution: false
+  adapter_filename: "adapter_model.safetensors"
+
+variants:
+  - base
+  - fine_tuned
+  - fine_tuned_rag
+
+execution:
+  preferred: "google_colab"
+  alternative: "kaggle"
+  require_cuda: true
+  minimum_vram_gb: 14
+  local_gpu_allowed: false
+  seed: 42
+  expected_cases: 24
+  evaluation_directory: "data/evaluation"
+  output_directory: "outputs/evaluation"
+
+generation:
+  enable_thinking: false
+  do_sample: true
+  temperature: 0.7
+  top_p: 0.8
+  top_k: 20
+  max_new_tokens: 256
+
+rag:
+  enabled: true
+  max_context_chars: 6000
+  expected_documents:
+    EVAL-PRO-001: ["ASM-002"]
+    EVAL-PRO-002: ["ASM-003"]
+    EVAL-PRO-004: ["ASM-005"]
+    EVAL-PRO-005: ["ASM-004"]
+
+prerequisites:
+  baseline_summary: "outputs/baseline/baseline-20260913T143007Z/summary.json"
+  baseline_responses: "outputs/baseline/baseline-20260913T143007Z/responses.jsonl"
+  training_manifest: "outputs/training/training-20260913T151805Z/run_manifest.json"
+  rag_manifest: "outputs/rag/index_manifest.json"
+
+outputs:
+  preflight_report: "outputs/evaluation/stage10_preflight.json"

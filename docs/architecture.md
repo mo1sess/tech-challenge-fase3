@@ -125,3 +125,30 @@ resposta, resultado de segurança e resultado da revisão humana. O conteúdo
 completo dos documentos não é duplicado no log; ficam apenas identificadores e
 relevância. A cadeia detecta remoção, reordenação ou alteração retroativa de
 eventos, mas não substitui armazenamento regulatório com controle de acesso.
+
+A ETAPA 10 mantém a avaliação desacoplada do agente operacional. O baseline
+oficial da ETAPA 4 não é reescrito. Em GPU remota, o mesmo modelo base e o
+adapter verificado por SHA-256 são carregados uma única vez para avaliar as
+duas variantes restantes.
+
+```text
+24 casos reservados ───────────────> baseline oficial salvo
+          │
+          ├── Qwen3-8B + QLoRA ───> respostas fine_tuned
+          │
+          └── retrieval CPU (5 protocolos)
+                -> contexto + fontes
+                -> Qwen3-8B + QLoRA
+                -> respostas fine_tuned_rag
+
+3 conjuntos de respostas
+  -> mesma rubrica lexical
+  -> métricas operacionais e retrieval
+  -> deltas absolutos
+  -> summary.json + comparison.md
+```
+
+O runner bloqueia CPU e GPUs com menos de 14 GB, impede substituição do modelo,
+verifica a revisão, o adapter e os hashes do conjunto reservado. O ChromaDB e
+os embeddings são reconstruídos no Colab, mas permanecem em CPU para preservar
+a VRAM da Tesla T4 para a LLM.
