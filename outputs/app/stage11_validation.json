@@ -1,0 +1,53 @@
+{
+  "entrypoint": "app/streamlit_app.py",
+  "errors": [],
+  "execution": {
+    "generator": "deterministic_evidence_preview",
+    "gpu_used": false,
+    "mode": "local_cpu",
+    "official_model": "Qwen/Qwen3-8B",
+    "official_model_loaded_locally": false
+  },
+  "ok": true,
+  "patient_count": 108,
+  "prerequisites": {
+    "agent_report": {
+      "path": "outputs/agent/stage8_validation.json",
+      "ready": true,
+      "stage": 8
+    },
+    "database_manifest": {
+      "path": "outputs/database/database_manifest.json",
+      "ready": true,
+      "stage": 7
+    },
+    "evaluation_summary": {
+      "path": "outputs/evaluation/evaluation-20260915T010249Z/summary.json",
+      "ready": true,
+      "stage": 10
+    },
+    "rag_manifest": {
+      "path": "outputs/rag/index_manifest.json",
+      "ready": true,
+      "stage": 6
+    },
+    "safety_report": {
+      "path": "outputs/safety/stage9_validation.json",
+      "ready": true,
+      "stage": 9
+    }
+  },
+  "required_sections": [
+    "answer",
+    "audit",
+    "human_validation",
+    "patient_selector",
+    "pending_exams",
+    "question_input",
+    "safety_status",
+    "sources"
+  ],
+  "stage": 11,
+  "streamlit": "1.46.1",
+  "validated_at_utc": "2026-09-15T01:43:03.436034+00:00"
+}

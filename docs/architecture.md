@@ -1,4 +1,4 @@
-# Arquitetura até a ETAPA 9
+# Arquitetura até a ETAPA 11
 
 As ETAPAS 0 e 1 contêm fundação, configuração, aquisição, inventário e
 validação estrutural. A ETAPA 2 acrescenta um fluxo local e reproduzível:
@@ -152,3 +152,25 @@ O runner bloqueia CPU e GPUs com menos de 14 GB, impede substituição do modelo
 verifica a revisão, o adapter e os hashes do conjunto reservado. O ChromaDB e
 os embeddings são reconstruídos no Colab, mas permanecem em CPU para preservar
 a VRAM da Tesla T4 para a LLM.
+
+A ETAPA 11 adiciona somente uma camada de apresentação sobre o mesmo fluxo
+protegido. O controller da aplicação não depende do Streamlit e preserva o
+`thread_id` necessário para interromper e retomar o LangGraph. A interface
+mantém esse identificador no estado da sessão e nunca oferece SQL arbitrário.
+
+```text
+Streamlit
+  -> ClinicalApplication
+       -> PatientRepository somente leitura -> SQLite
+       -> LangGraph
+            -> ferramentas LangChain -> SQLite + ChromaDB
+            -> guardrails
+            -> human_review (interrupt/resume)
+            -> auditoria JSONL encadeada
+  <- resposta + fontes + pendências + segurança + revisão
+```
+
+O modo local é rotulado `deterministic_evidence_preview` e não carrega o
+Qwen3-8B na GTX 1650. A inferência oficial permanece comprovada pelas
+evidências remotas das ETAPAS 4, 5 e 10; a interface demonstra a integração e
+os controles sem substituir silenciosamente o modelo oficial.

@@ -41,6 +41,15 @@ class PatientRepository:
     def _rows(rows) -> list[dict[str, Any]]:
         return [dict(row) for row in rows]
 
+    def list_patient_ids(self) -> list[str]:
+        """List pseudonymized identifiers for the bounded UI selector."""
+
+        with database_connection(self.database_path, read_only=True) as connection:
+            rows = connection.execute(
+                "SELECT patient_id FROM patients ORDER BY patient_id"
+            ).fetchall()
+        return [str(row["patient_id"]) for row in rows]
+
     def get_patient(self, patient_id: str) -> dict[str, Any] | None:
         patient_id = validate_patient_id(patient_id)
         with database_connection(self.database_path, read_only=True) as connection:
@@ -163,4 +172,3 @@ class PatientRepository:
                 (patient_id, limit),
             ).fetchall()
         return self._rows(rows)
-

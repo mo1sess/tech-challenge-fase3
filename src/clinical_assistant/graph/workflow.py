@@ -40,16 +40,106 @@ class DeterministicEvidencePreview:
 
     mode = "deterministic_evidence_preview"
 
+    @staticmethod
+    def _unique_descriptions(records: list[dict[str, Any]], *, limit: int = 5) -> list[str]:
+        descriptions: list[str] = []
+        seen: set[str] = set()
+        for record in records:
+            description = " ".join(str(record.get("description", "")).split())
+            key = _normalize(description)
+            if not description or key in seen:
+                continue
+            seen.add(key)
+            descriptions.append(description)
+            if len(descriptions) == limit:
+                break
+        return descriptions
+
+    @staticmethod
+    def _format_observations(records: list[dict[str, Any]], *, limit: int = 5) -> list[str]:
+        observations: list[str] = []
+        for record in records:
+            description = " ".join(str(record.get("description", "")).split())
+            value = " ".join(str(record.get("value", "")).split())
+            units = " ".join(str(record.get("units", "")).split())
+            if not description:
+                continue
+            detail = " ".join(part for part in (value, units) if part)
+            observations.append(f"{description}: {detail}" if detail else description)
+            if len(observations) == limit:
+                break
+        return observations
+
+    @staticmethod
+    def _format_protocols(documents: list[dict[str, Any]], *, limit: int = 5) -> list[str]:
+        protocols: list[str] = []
+        seen: set[str] = set()
+        for document in documents:
+            metadata = document.get("metadata", {})
+            name = " ".join(
+                str(metadata.get("document_name") or metadata.get("document_id") or "").split()
+            )
+            key = _normalize(name)
+            if not name or key in seen:
+                continue
+            seen.add(key)
+            protocols.append(name)
+            if len(protocols) == limit:
+                break
+        return protocols
+
     def generate(self, prompt: str, state: ClinicalWorkflowState) -> str:
         patient = state.get("patient_data", {}).get("patient")
         if not patient or patient.get("error") == "patient_not_found":
             return "Paciente pseudonimizado não localizado; nenhum dado clínico foi gerado."
+
+        question = state["question"]
+        patient_id = state["patient_id"]
+        patient_data = state.get("patient_data", {})
         pending = state.get("pending_exams", [])
         documents = state.get("retrieved_documents", [])
+
+        if _contains_any(
+            question,
+            ("condição", "condições", "doença", "doenças", "diagnóstico", "diagnósticos", "problema clínico"),
+        ):
+            records = patient_data.get("conditions", []) or []
+            items = self._unique_descriptions(records)
+            detail = "; ".join(items) if items else "nenhuma condição encontrada"
+            answer = f"Condições registradas no prontuário sintético de {patient_id} ({len(records)}): {detail}."
+        elif _contains_any(
+            question,
+            ("medicamento", "medicação", "remédio", "dose", "prescrição", "tratamento"),
+        ):
+            records = patient_data.get("medications", []) or []
+            items = self._unique_descriptions(records)
+            detail = "; ".join(items) if items else "nenhum medicamento encontrado"
+            answer = f"Medicamentos registrados no prontuário sintético de {patient_id} ({len(records)}): {detail}."
+        elif _contains_any(
+            question,
+            ("observação", "resultado", "medida", "pressão", "frequência", "laboratório"),
+        ):
+            records = patient_data.get("observations", []) or []
+            items = self._format_observations(records)
+            detail = "; ".join(items) if items else "nenhuma observação encontrada"
+            answer = f"Observações registradas no prontuário sintético de {patient_id} ({len(records)}): {detail}."
+        elif _contains_any(question, ("exame", "pendente", "solicitação")):
+            items = self._unique_descriptions(pending)
+            detail = "; ".join(items) if items else "nenhum exame explicitamente pendente encontrado"
+            answer = f"Exames explicitamente pendentes para {patient_id} ({len(pending)}): {detail}."
+        elif _contains_any(question, ("protocolo", "fluxo", "diretriz", "pcdt", "guideline")):
+            items = self._format_protocols(documents)
+            detail = "; ".join(items) if items else "nenhum protocolo recuperado"
+            answer = f"Protocolos sintéticos recuperados para esta consulta ({len(documents)} trechos): {detail}."
+        else:
+            answer = (
+                f"Prévia técnica para {patient_id}: {len(pending)} exame(s) explicitamente "
+                f"pendente(s) e {len(documents)} trecho(s) de protocolo sintético recuperado(s)."
+            )
+
         lines = [
-            f"Prévia técnica para {state['patient_id']} baseada apenas nos dados recuperados.",
-            f"Exames explicitamente pendentes encontrados: {len(pending)}.",
-            f"Trechos de protocolo sintético recuperados: {len(documents)}.",
+            answer,
+            "A resposta está limitada aos registros sintéticos recuperados.",
             "Nenhuma prescrição, diagnóstico ou alteração de tratamento foi produzida.",
             "O Qwen3-8B não foi executado neste teste local de orquestração.",
         ]
@@ -71,7 +161,16 @@ def _patient_tool_selection(question: str) -> list[str]:
     groups = (
         (
             "get_patient_conditions",
-            ("condição", "doença", "diagnóstico", "asma", "problema clínico"),
+            (
+                "condição",
+                "condições",
+                "doença",
+                "doenças",
+                "diagnóstico",
+                "diagnósticos",
+                "asma",
+                "problema clínico",
+            ),
         ),
         (
             "get_patient_medications",

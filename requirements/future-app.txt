@@ -1,4 +1,3 @@
-# Dependencias reservadas para a interface posterior ao agente.
--r agent-local.txt
-streamlit==1.46.1
+# Compatibilidade: a interface agora usa requirements/app-local.txt.
+-r app-local.txt
 

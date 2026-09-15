@@ -1,0 +1,3 @@
+# ETAPA 11 - interface Streamlit local em CPU.
+-r agent-local.txt
+streamlit==1.46.1

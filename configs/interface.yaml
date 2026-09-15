@@ -1,0 +1,47 @@
+schema_version: 1
+stage: 11
+
+application:
+  title: "Assistente Clínico TechCare"
+  subtitle: "MVP acadêmico com dados sintéticos"
+  locale: "pt-BR"
+  page_icon: "🩺"
+  disclaimer: >-
+    Este sistema é um protótipo acadêmico com dados sintéticos. Não deve ser
+    usado para diagnóstico, prescrição ou decisão clínica autônoma.
+
+execution:
+  mode: "local_cpu"
+  generator: "deterministic_evidence_preview"
+  official_model: "Qwen/Qwen3-8B"
+  official_model_local_loading: false
+  maximum_question_chars: 1000
+
+interface:
+  audit_events_limit: 20
+  required_sections:
+    - patient_selector
+    - question_input
+    - answer
+    - sources
+    - pending_exams
+    - safety_status
+    - human_validation
+    - audit
+  example_questions:
+    - "Quais exames estão pendentes?"
+    - "Quais condições estão registradas?"
+    - "Quais medicamentos aparecem no prontuário?"
+    - "Existe algum protocolo interno relacionado a asma?"
+
+prerequisites:
+  database_manifest: "outputs/database/database_manifest.json"
+  database_path: "data/database/techcare.db"
+  rag_manifest: "outputs/rag/index_manifest.json"
+  agent_report: "outputs/agent/stage8_validation.json"
+  safety_report: "outputs/safety/stage9_validation.json"
+  evaluation_summary: "outputs/evaluation/evaluation-20260915T010249Z/summary.json"
+  app_entrypoint: "app/streamlit_app.py"
+
+outputs:
+  validation_report: "outputs/app/stage11_validation.json"

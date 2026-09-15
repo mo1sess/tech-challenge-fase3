@@ -56,6 +56,8 @@ outputs/**
 !outputs/safety/stage9_validation.json
 !outputs/evaluation/
 !outputs/evaluation/**
+!outputs/app/
+!outputs/app/stage11_validation.json
 
 # Runtime audit events may contain questions and patient pseudonyms.
 outputs/logs/

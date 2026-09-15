@@ -2,8 +2,8 @@
 
 Fundação reproduzível de um protótipo acadêmico de apoio ao acompanhamento de
 pacientes com asma. O repositório está deliberadamente limitado às **ETAPAS 0
-a 10: fundação, dados, baseline, QLoRA, RAG, SQLite, LangChain, LangGraph,
-segurança, auditoria e avaliação comparativa**.
+a 11: fundação, dados, baseline, QLoRA, RAG, SQLite, LangChain, LangGraph,
+segurança, auditoria, avaliação comparativa e interface Streamlit**.
 
 > **Aviso:** Este sistema é um protótipo acadêmico e não deve ser utilizado para
 > diagnóstico, prescrição ou tomada autônoma de decisões clínicas.
@@ -32,7 +32,9 @@ segurança, auditoria e avaliação comparativa**.
 - Concluído em GPU remota: comparação formal do modelo base, fine-tuned e
   fine-tuned + RAG, com 24 casos por variante e evidências validadas em
   `outputs/evaluation/evaluation-20260915T010249Z`.
-- Não implementado: Streamlit e pacote final de entrega.
+- Implementado localmente: MVP Streamlit com seletor de paciente, consulta,
+  fontes, exames pendentes, segurança, revisão humana e auditoria demonstrável.
+- Não implementado: pacote final de entrega da ETAPA 12.
 - Modelo oficial: `Qwen/Qwen3-8B`, sem substituição silenciosa.
 
 ## Ambiente escolhido
@@ -45,8 +47,9 @@ segurança, auditoria e avaliação comparativa**.
 
 As dependências estão separadas em `requirements/local.txt`,
 `requirements/dev.txt`, `requirements/rag-local.txt`, `requirements/agent-local.txt`,
-`requirements/gpu-colab-kaggle.txt` e `requirements/future-app.txt`. A pilha
-RAG é local e CPU-only; a pilha de treinamento remoto permanece separada.
+`requirements/app-local.txt` e `requirements/gpu-colab-kaggle.txt`. A pilha
+RAG e a interface são locais e CPU-only; a pilha de treinamento remoto
+permanece separada.
 
 ## Preparação no Windows
 
@@ -304,14 +307,41 @@ RAG, 0,7139. O RAG recuperou o documento esperado em 25% dos quatro casos com
 expectativa objetiva. As métricas são lexicais e não estabelecem correção
 clínica. Consulte `docs/evaluation.md` e `docs/stage_10_evaluation.md`.
 
+## Interface Streamlit
+
+O MVP da ETAPA 11 reutiliza o StateGraph protegido das ETAPAS 8 e 9. A
+interface mostra paciente, pergunta, resposta, fontes, exames pendentes,
+status de segurança, necessidade de validação médica e eventos recentes de
+auditoria.
+
+Instale a dependência da interface e valide os pré-requisitos:
+
+```powershell
+& .\.venv\Scripts\python.exe -m pip install -r requirements\app-local.txt
+& .\.venv\Scripts\python.exe -m pip install -e .
+& .\.venv\Scripts\python.exe scripts\validate_streamlit_app.py
+```
+
+Execute a aplicação:
+
+```powershell
+& .\.venv\Scripts\python.exe -m streamlit run app\streamlit_app.py
+```
+
+O navegador abrirá em `http://localhost:8501`. O modo local usa
+`deterministic_evidence_preview`, explicitamente identificado na tela. Ele
+exercita SQLite, RAG, LangChain, LangGraph, guardrails, human-in-the-loop e
+auditoria sem tentar carregar o Qwen3-8B na GTX 1650. Consulte
+`docs/stage_11_streamlit.md`.
+
 ## Testes
 
 ```powershell
 python -m pytest
 ```
 
-Os markers são `unit`, `integration`, `network` e `gpu`. Nesta entrega, os 110
-testes passaram em 196,99 segundos no Windows. Os testes locais não usam GPU;
+Os markers são `unit`, `integration`, `network` e `gpu`. Nesta entrega, os 116
+testes passaram em 65,10 segundos no Windows. Os testes locais não usam GPU;
 somente a instalação inicial do modelo de embeddings requer rede.
 
 ## Fontes
@@ -334,6 +364,6 @@ dos downloads antes de redistribuir os datasets.
 
 ## Próxima etapa (aguardando aprovação)
 
-A ETAPA 10 está pronta para a execução oficial em GPU remota. A ETAPA 11
-(Streamlit) e a ETAPA 12 (entrega final) não serão iniciadas antes da importação
-e validação dos resultados reais desta comparação.
+A ETAPA 11 entrega a interface Streamlit local. A ETAPA 12 (relatório,
+diagramas e roteiro de demonstração) não será iniciada antes da aprovação da
+interface.
