@@ -84,7 +84,7 @@ def test_official_inference_rejects_cpu_and_small_local_gpu() -> None:
     cuda = SimpleNamespace(
         is_available=lambda: True,
         get_device_properties=lambda index: SimpleNamespace(
-            name="GTX 1650", total_memory=4 * 1024**3
+            name="Low VRAM test GPU", total_memory=4 * 1024**3
         ),
         get_device_capability=lambda index: (7, 5),
     )
@@ -107,7 +107,7 @@ def test_full_agent_preflight_is_reproducible() -> None:
 
 
 @pytest.mark.unit
-def test_colab_notebook_is_valid_and_never_targets_local_gpu() -> None:
+def test_colab_notebook_is_valid_and_targets_compatible_remote_gpu() -> None:
     path = project_root() / "notebooks" / "07_full_agent_colab.ipynb"
     notebook = json.loads(path.read_text(encoding="utf-8"))
     source = "\n".join(
@@ -116,5 +116,5 @@ def test_colab_notebook_is_valid_and_never_targets_local_gpu() -> None:
     assert notebook["nbformat"] == 4
     assert "serve_qwen_agent.py" in source
     assert "TECHCARE_REMOTE_TOKEN" in source
-    assert "GTX 1650" in source
-    assert "Não execute na GTX 1650" in source
+    assert "Tesla T4" in source
+    assert "14 GB" in source

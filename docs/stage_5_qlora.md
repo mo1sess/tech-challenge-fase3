@@ -67,8 +67,8 @@ com verificação de zero coincidências exatas.
 - Thinking mode do Qwen3 desabilitado.
 - Loss calculada somente sobre a resposta esperada.
 
-Esses parâmetros priorizam a execução na Tesla T4 de 15 GB. A GPU local GTX
-1650 de 4 GB é rejeitada pelo código antes do carregamento do modelo.
+Esses parâmetros priorizam a execução na Tesla T4 de 15 GB. GPUs abaixo do
+requisito mínimo de 14 GB de VRAM são rejeitadas antes do carregamento.
 
 ## Execução
 

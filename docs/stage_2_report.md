@@ -1,7 +1,7 @@
 # Relatório de execução — ETAPA 2
 
 Data da execução: 2026-09-12  
-Raiz prevista: `C:\Users\msiqu\OneDrive\Documentos\tech-challenge-fase3`
+Raiz prevista: diretório do repositório clonado.
 
 ## Escopo concluído
 
@@ -75,8 +75,8 @@ manifesto de preprocessing é versionado para auditoria.
 3. Nenhum protocolo clínico local foi fornecido.
 4. Synthea é sintético e não representa prevalência ou trajetória clínica real.
 5. Mascaramento baseado em padrões não substitui revisão formal de privacidade.
-6. A GTX 1650 de 4 GB não é adequada ao fine-tuning do Qwen3-8B; nenhum treino
-   foi tentado localmente.
+6. O fine-tuning do Qwen3-8B exige GPU com pelo menos 14 GB de VRAM; nenhum
+   treino é iniciado em hardware abaixo desse requisito.
 
 ## Próximo passo bloqueado
 

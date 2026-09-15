@@ -66,7 +66,7 @@ def validate_streamlit_stage(root: Path, *, write_report: bool = True) -> dict[s
     if execution.get("generator") != "deterministic_evidence_preview":
         errors.append("local UI must identify the deterministic preview generator")
     if execution.get("official_model_local_loading") is not False:
-        errors.append("the official Qwen3-8B cannot be loaded on the local GTX 1650")
+        errors.append("the official Qwen3-8B must not load in local preview mode")
 
     sections = set(map(str, config.get("interface", {}).get("required_sections", [])))
     missing_sections = sorted(REQUIRED_SECTIONS - sections)

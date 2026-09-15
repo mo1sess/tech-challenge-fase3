@@ -30,8 +30,8 @@ texto. A mesma entrada gera os mesmos IDs.
 O modelo oficial de embeddings desta etapa é
 `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`, revisão
 `e8f8c211226b894fcb81acc59f3b34ba3efd5f42`. Ele suporta português e é
-executado explicitamente em CPU com vetores normalizados. Isso não depende da
-GTX 1650 nem altera o ambiente CUDA usado pelo QLoRA no Colab.
+executado explicitamente em CPU com vetores normalizados. Isso não depende de
+GPU nem altera o ambiente CUDA usado pelo QLoRA no Colab.
 
 O ChromaDB usa cliente persistente e distância cosseno. Os embeddings são
 calculados fora do Chroma e fornecidos explicitamente na indexação e consulta.
@@ -47,13 +47,12 @@ escopo ficaram entre 0,000 e 0,165.
 ## Execução no Windows
 
 ```powershell
-Set-Location 'C:\Users\msiqu\OneDrive\Documentos\tech-challenge-fase3'
-.\.venv\Scripts\Activate.ps1
-python -m pip install -r requirements\rag-local.txt
-python scripts\build_rag_index.py
-python scripts\validate_rag_index.py
-python scripts\query_rag.py "Como verificar exames pendentes?"
-python -m pytest
+Set-Location '.\tech-challenge-fase3'
+& .\.venv\Scripts\python.exe -m pip install -r requirements\rag-local.txt
+& .\.venv\Scripts\python.exe scripts\build_rag_index.py
+& .\.venv\Scripts\python.exe scripts\validate_rag_index.py
+& .\.venv\Scripts\python.exe scripts\query_rag.py "Como verificar exames pendentes?"
+& .\.venv\Scripts\python.exe -m pytest
 ```
 
 Na primeira construção, o modelo de embeddings é baixado. As execuções

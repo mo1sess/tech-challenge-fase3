@@ -211,7 +211,7 @@ if profile.get("official_model_active"):
 else:
     st.info(
         "Modo local: prévia determinística baseada nas evidências recuperadas. "
-        "O Qwen3-8B oficial não é carregado nesta GTX 1650."
+        "O Qwen3-8B oficial não é carregado neste modo."
     )
 
 with st.sidebar:

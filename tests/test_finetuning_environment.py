@@ -22,7 +22,7 @@ class _SmallCuda:
     @staticmethod
     def get_device_properties(index: int) -> SimpleNamespace:
         assert index == 0
-        return SimpleNamespace(name="GTX 1650", total_memory=4 * 1024**3)
+        return SimpleNamespace(name="Low VRAM test GPU", total_memory=4 * 1024**3)
 
     @staticmethod
     def get_device_capability(index: int) -> tuple[int, int]:

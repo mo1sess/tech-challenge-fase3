@@ -68,8 +68,8 @@ transforma texto generativo livre em informação clinicamente validada.
 - serviço FastAPI protegido por bearer token;
 - túnel HTTPS temporário usado somente durante a demonstração.
 
-A GTX 1650 de 4 GB é bloqueada antes do carregamento. O preflight exige uma GPU
-remota com pelo menos 14 GB de VRAM.
+O preflight bloqueia ambientes sem GPU compatível e exige pelo menos 14 GB de
+VRAM para a execução oficial.
 
 ## Integridade do modelo
 

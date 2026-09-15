@@ -17,7 +17,7 @@ As dependências locais estão isoladas em `requirements/agent-local.txt`:
 - `langgraph==0.4.8`;
 - a pilha RAG local em CPU da ETAPA 6.
 
-O fluxo não carrega o Qwen3-8B na GTX 1650. A geração local usa
+O fluxo não carrega o Qwen3-8B no modo local. A geração local usa
 `deterministic_evidence_preview`, identificada no estado e no relatório como
 uma prévia técnica, nunca como o modelo oficial. A interface `ResponseGenerator`
 permite injetar a LLM posteriormente sem reescrever os nós.

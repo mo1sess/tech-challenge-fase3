@@ -69,7 +69,7 @@ versões das bibliotecas, hashes e métricas em `outputs/baseline`.
   protocolo verificam se o modelo evita inventar dados.
 - Amostragem em GPU pode ter pequenas variações mesmo com seed.
 - A quantização faz parte do contrato e deve permanecer igual na comparação.
-- A GTX 1650 local é bloqueada explicitamente pelo requisito de VRAM.
+- GPUs abaixo do requisito mínimo de VRAM são bloqueadas antes do carregamento.
 - Smoke tests não podem ser apresentados como baseline completo.
 
 ## Próximo passo

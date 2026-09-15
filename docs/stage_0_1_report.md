@@ -1,7 +1,7 @@
 # Relatorio de execucao — ETAPAS 0 e 1
 
 Data da execucao: 2026-09-12  
-Raiz: `C:\Users\msiqu\OneDrive\Documentos\tech-challenge-fase3`
+Raiz: diretório do repositório clonado.
 
 ## Escopo concluido
 
@@ -80,4 +80,3 @@ conflito de dependencias foi encontrado. Esses pacotes nao foram instalados.
 A ETAPA 2 podera implementar limpeza, anonimizacao, normalizacao, curadoria,
 deduplicacao e divisao train/validation/test com verificacao de data leakage.
 Nenhum desses passos foi iniciado.
-

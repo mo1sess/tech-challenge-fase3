@@ -1,4 +1,4 @@
-# Google Colab/Kaggle Linux GPU only. Never install on the GTX 1650 laptop.
+# Google Colab/Kaggle Linux GPU only; requires at least 14 GB of VRAM.
 # Keep the CUDA-enabled PyTorch supplied by the hosted runtime.
 PyYAML==6.0.3
 transformers==4.53.2

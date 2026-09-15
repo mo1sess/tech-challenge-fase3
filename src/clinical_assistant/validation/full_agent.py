@@ -34,7 +34,7 @@ def validate_full_agent_preflight(
     if model.get("id") != "Qwen/Qwen3-8B" or model.get("allow_substitution") is not False:
         errors.append("official model must remain the pinned Qwen/Qwen3-8B")
     if config.get("execution", {}).get("local_gpu_allowed") is not False:
-        errors.append("the official model cannot be enabled on the local GTX 1650")
+        errors.append("the official model must remain disabled in local preview mode")
 
     files = {relative: (root / relative).is_file() for relative in REQUIRED_FILES}
     errors.extend(f"missing required file: {path}" for path, ready in files.items() if not ready)

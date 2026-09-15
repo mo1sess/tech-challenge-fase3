@@ -9,6 +9,47 @@ remota da LLM customizada**.
 > **Aviso:** Este sistema é um protótipo acadêmico e não deve ser utilizado para
 > diagnóstico, prescrição ou tomada autônoma de decisões clínicas.
 
+## Guia rápido para avaliadores
+
+O repositório oferece dois modos explícitos:
+
+- `local_preview`: demonstra em CPU o Streamlit, SQLite, RAG, LangChain,
+  LangGraph, guardrails, revisão humana e auditoria. Não executa a LLM.
+- `qwen_remote`: usa o mesmo fluxo, mas envia o contexto sintético para o
+  Qwen3-8B com o adapter QLoRA em uma GPU remota com pelo menos 14 GB de VRAM.
+
+Para testar o modo local a partir de um clone novo no Windows PowerShell:
+
+```powershell
+git clone https://github.com/mo1sess/tech-challenge-fase3.git
+Set-Location .\tech-challenge-fase3
+py -3.12 scripts\setup_evaluator.py --run
+```
+
+Em Linux ou macOS, use `python3.12 scripts/setup_evaluator.py --run`.
+
+O navegador abrirá em `http://localhost:8501`. A aquisição e o preprocessing
+podem demorar e, durante downloads grandes, o terminal pode ficar algum tempo
+sem imprimir progresso. Não é necessário ativar o ambiente virtual nem alterar
+a política de execução do PowerShell. O script força `local_preview` e remove
+URL e token remotos somente do processo filho, evitando reutilizar por engano
+um túnel encerrado. O procedimento manual e a solução de problemas estão no
+[guia do avaliador](docs/evaluator_guide.md).
+
+O teste com a LLM oficial requer também o adapter da ETAPA 5, que não é
+versionado por causa do tamanho. O arquivo
+`qwen3_8b_qlora_adapter_only.zip` deve acompanhar o pacote de avaliação ou ser
+obtido pelo link de artefato informado na entrega. Consulte o
+[guia do avaliador](docs/evaluator_guide.md) para executar o notebook Colab,
+conectar o Streamlit e resolver erros comuns.
+
+A correspondência entre cada item do PDF e os arquivos de implementação está
+em [rastreabilidade dos requisitos](docs/requirements_traceability.md). O
+[relatório técnico](docs/technical_report.md) consolida arquitetura,
+fine-tuning, avaliação, segurança e limitações. O
+[roteiro do vídeo](docs/video_demo.md) cobre os quatro itens exigidos para a
+demonstração de até 15 minutos.
+
 ## Estado do projeto
 
 - Implementado: estrutura, ambiente local, aquisição e validação dos dados;
@@ -39,16 +80,17 @@ remota da LLM customizada**.
   serviço GPU protegido por token, validação da identidade do modelo e do hash
   do adapter, notebook Colab e modo explícito sem fallback silencioso. A
   execução oficial ponta a ponta em GPU da ETAPA 11.1 permanece pendente.
-- Não implementado: pacote final de entrega da ETAPA 12.
+- Pendências externas à implementação: publicar o adapter verificável, preservar
+  a validação remota automatizada e adicionar o link do vídeo de demonstração.
 - Modelo oficial: `Qwen/Qwen3-8B`, sem substituição silenciosa.
 
-## Ambiente escolhido
+## Ambientes de referência
 
-- Windows 11 para desenvolvimento local.
+- Windows PowerShell para a demonstração local reproduzível.
 - Python 3.12 (`>=3.12,<3.13`).
-- GPU local GTX 1650 4 GB somente para testes técnicos leves; não executar o
-  treinamento QLoRA do Qwen3-8B nela.
-- Fine-tuning em Linux com GPU no Google Colab; Kaggle como alternativa.
+- CPU para SQLite, RAG, LangChain, LangGraph, segurança e Streamlit.
+- Linux com GPU de pelo menos 14 GB de VRAM para QLoRA e inferência oficial;
+  Google Colab com Tesla T4 é o ambiente de referência e Kaggle é alternativa.
 
 As dependências estão separadas em `requirements/local.txt`,
 `requirements/dev.txt`, `requirements/rag-local.txt`, `requirements/agent-local.txt`,
@@ -59,10 +101,12 @@ permanece separada.
 ## Preparação no Windows
 
 ```powershell
-Set-Location 'C:\Users\msiqu\OneDrive\Documentos\tech-challenge-fase3'
+Set-Location '.\tech-challenge-fase3'
 .\scripts\setup_windows.ps1
-.\.venv\Scripts\Activate.ps1
 ```
+
+Os demais comandos usam diretamente `.\.venv\Scripts\python.exe`, portanto a
+ativação do ambiente não é obrigatória.
 
 Se o launcher da Microsoft Store listar Python 3.12 mas não conseguir executá-lo,
 instale a distribuição oficial do Python ou informe explicitamente o executável:
@@ -336,7 +380,7 @@ Execute a aplicação:
 O navegador abrirá em `http://localhost:8501`. O modo local usa
 `deterministic_evidence_preview`, explicitamente identificado na tela. Ele
 exercita SQLite, RAG, LangChain, LangGraph, guardrails, human-in-the-loop e
-auditoria sem tentar carregar o Qwen3-8B na GTX 1650. Consulte
+auditoria sem tentar carregar o Qwen3-8B no ambiente local. Consulte
 `docs/stage_11_streamlit.md`.
 
 ### Agente completo com Qwen3-8B remoto
@@ -396,12 +440,12 @@ dos downloads antes de redistribuir os datasets.
   pode ser apresentado como protocolo real.
 - Resultados e quantidades só são documentados quando medidos por execução.
 
-## Próxima execução
+## Checklist final de entrega
 
-A implementação local da ETAPA 11.1 está pronta e uma consulta manual já
-confirmou o caminho Streamlit -> LangGraph -> Qwen3-8B + QLoRA em Tesla T4. A
-observação também motivou a trava de evidência factual descrita acima. Falta
-executar `scripts/run_remote_agent_validation.py` com o serviço ativo e
-preservar o relatório automatizado sem credenciais. Depois dessa validação,
-pode ser iniciada a ETAPA 12 (relatório, diagramas, slides e roteiro de
-demonstração).
+- [x] código modular, dados sintéticos, fine-tuning, LangChain e LangGraph;
+- [x] Streamlit, segurança, revisão humana, fontes e auditoria;
+- [x] avaliação comparativa, relatório técnico e diagrama do fluxo;
+- [ ] publicar o adapter QLoRA como artefato separado e verificável;
+- [ ] executar `scripts/run_remote_agent_validation.py` com o serviço ativo e
+  preservar o relatório sem credenciais;
+- [ ] gravar o vídeo de até 15 minutos e adicionar seu link ao README.

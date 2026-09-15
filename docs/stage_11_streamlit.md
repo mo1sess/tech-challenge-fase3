@@ -9,7 +9,7 @@ executados com sucesso.
 
 Disponibilizar um MVP local e demonstrável sobre as camadas já validadas de
 SQLite, RAG, LangChain, LangGraph, segurança e auditoria. A interface não
-carrega o Qwen3-8B na GTX 1650 de 4 GB.
+carrega o Qwen3-8B no modo local.
 
 A extensão da ETAPA 11.1 adiciona um modo oficial remoto sem retirar este modo
 local. Consulte `docs/stage_11_1_full_agent.md`.

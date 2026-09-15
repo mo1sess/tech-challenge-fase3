@@ -14,7 +14,6 @@ execution:
   require_cuda: true
   minimum_vram_gb: 14
   local_full_finetuning_allowed: false
-  local_gpu: "NVIDIA GeForce GTX 1650 4 GB"
   output_directory: "outputs/training"
 
 reproducibility:

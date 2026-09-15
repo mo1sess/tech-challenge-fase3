@@ -1,7 +1,7 @@
 # Relatório de execução - ETAPA 3
 
 Data da execução: 2026-09-12  
-Raiz: `C:\Users\msiqu\OneDrive\Documentos\tech-challenge-fase3`
+Raiz: diretório do repositório clonado.
 
 ## Escopo concluído
 

@@ -69,7 +69,7 @@ fine-tuned, 24 respostas fine-tuned + RAG e nenhum erro.
 
 ## Limitações do ambiente
 
-- A GTX 1650 com 4 GB está bloqueada para esta execução.
+- GPUs abaixo do requisito mínimo são bloqueadas para esta execução.
 - A avaliação requer Google Colab/Kaggle com pelo menos 14 GB de VRAM.
 - A variante base usa a evidência preservada da ETAPA 4; ela não é executada
   novamente sem necessidade.

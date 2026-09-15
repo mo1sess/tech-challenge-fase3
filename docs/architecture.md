@@ -1,4 +1,4 @@
-# Arquitetura até a ETAPA 11
+# Arquitetura até a ETAPA 11.1
 
 As ETAPAS 0 e 1 contêm fundação, configuração, aquisição, inventário e
 validação estrutural. A ETAPA 2 acrescenta um fluxo local e reproduzível:
@@ -29,9 +29,40 @@ independente confere esquema, procedencia, unicidade e controles de seguranca.
 O desenho preserva camadas separadas para dados estruturados, RAG, LangChain,
 LangGraph, segurança, auditoria, avaliação e interface.
 
+## Fluxo operacional do assistente
+
+```mermaid
+flowchart LR
+    U[Usuário no Streamlit] --> IN[Guardrail de entrada]
+    IN -->|bloqueado| SAFE[Resposta segura]
+    IN -->|permitido| G[LangGraph]
+    G --> LC[Ferramentas LangChain]
+    LC --> DB[(SQLite somente leitura)]
+    LC --> RAG[(RAG / ChromaDB)]
+    DB --> CTX[Contexto mínimo com fontes]
+    RAG --> CTX
+    CTX --> MODE{Modo de execução}
+    MODE -->|local_preview| PRE[Prévia determinística]
+    MODE -->|qwen_remote| LLM[Qwen3-8B + adapter QLoRA]
+    PRE --> FACT[Trava de evidência factual]
+    LLM --> FACT
+    FACT --> OUT[Guardrail de saída]
+    OUT --> REVIEW{Validação humana necessária?}
+    REVIEW -->|sim| HITL[Interrupção e revisão]
+    REVIEW -->|não| AUDIT[Auditoria encadeada]
+    HITL --> AUDIT
+    SAFE --> AUDIT
+    AUDIT --> ANSWER[Resposta, fontes e status]
+```
+
+No modo oficial, a LLM customizada participa do mesmo fluxo. Em consultas
+factuais, nomes, códigos, datas, valores e unidades liberados ao usuário são
+reconstruídos das evidências estruturadas, enquanto a saída bruta permanece
+disponível apenas para rastreabilidade interna.
+
 O modelo oficial permanece `Qwen/Qwen3-8B`. Seu treinamento QLoRA é restrito a
-Google Colab ou Kaggle; a GTX 1650 local é bloqueada pelo requisito mínimo de
-VRAM.
+um ambiente Linux com GPU de pelo menos 14 GB de VRAM, como Google Colab ou
+Kaggle.
 
 A ETAPA 4 mantém um runner de baseline separado do futuro treinamento. Ele
 carrega a revisão fixada do Qwen3-8B em 4 bits, executa o conjunto reservado,
@@ -171,7 +202,7 @@ Streamlit
 ```
 
 O modo local é rotulado `deterministic_evidence_preview` e não carrega o
-Qwen3-8B na GTX 1650. A inferência oficial permanece comprovada pelas
+Qwen3-8B. A inferência oficial permanece comprovada pelas
 evidências remotas das ETAPAS 4, 5 e 10; a interface demonstra a integração e
 os controles sem substituir silenciosamente o modelo oficial.
 
