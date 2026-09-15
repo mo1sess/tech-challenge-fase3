@@ -1,0 +1,38 @@
+schema_version: 1
+stage: "11.1"
+
+execution:
+  local_mode: "local_preview"
+  official_mode: "qwen_remote"
+  minimum_vram_gb: 14
+  local_gpu_allowed: false
+  remote_timeout_seconds: 180
+  remote_url_environment: "TECHCARE_REMOTE_URL"
+  remote_token_environment: "TECHCARE_REMOTE_TOKEN"
+  mode_environment: "TECHCARE_EXECUTION_MODE"
+
+model:
+  id: "Qwen/Qwen3-8B"
+  revision: "b968826d9c46dd6066d109eabc6255188de91218"
+  adapter_manifest: "outputs/training/training-20260913T151805Z/run_manifest.json"
+  adapter_artifact: "adapter/adapter_model.safetensors"
+  allow_substitution: false
+
+quantization:
+  load_in_4bit: true
+  quant_type: "nf4"
+  double_quant: true
+  compute_dtype: "float16"
+
+generation:
+  max_new_tokens: 256
+  system_prompt: >-
+    Você é um assistente clínico acadêmico do Hospital TechCare. Use somente o
+    contexto e as fontes recebidas. Não prescreva, não altere medicamentos, não
+    confirme diagnósticos e não invente dados. Decisões clínicas exigem
+    validação médica. Diferencie prontuário sintético, protocolo sintético e
+    limitações de fonte.
+
+outputs:
+  preflight_report: "outputs/app/stage11_1_preflight.json"
+  remote_validation_root: "outputs/app/remote"

@@ -1,0 +1,6 @@
+# ETAPA 11.1 - servidor oficial em Google Colab/Kaggle com GPU.
+# Mantenha o PyTorch CUDA fornecido pelo runtime hospedado.
+-r gpu-colab-kaggle.txt
+fastapi==0.115.14
+uvicorn==0.34.3
+requests==2.32.4

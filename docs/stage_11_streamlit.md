@@ -11,6 +11,9 @@ Disponibilizar um MVP local e demonstrável sobre as camadas já validadas de
 SQLite, RAG, LangChain, LangGraph, segurança e auditoria. A interface não
 carrega o Qwen3-8B na GTX 1650 de 4 GB.
 
+A extensão da ETAPA 11.1 adiciona um modo oficial remoto sem retirar este modo
+local. Consulte `docs/stage_11_1_full_agent.md`.
+
 ## Interface entregue
 
 - seletor com pacientes pseudonimizados;
@@ -65,6 +68,10 @@ Se o banco ou o índice local estiverem ausentes, reconstrua-os antes:
 - a decisão humana é apenas uma demonstração e não autentica um profissional;
 - o log local pode conter perguntas e pseudônimos e, por isso, não é versionado;
 - a aplicação não tem autenticação, autorização ou garantias de produção.
+
+Essas limitações descrevem o modo local. No modo `qwen_remote`, o gerador é o
+Qwen3-8B com adapter QLoRA em GPU, protegido por token e validado por identidade
+e hash.
 
 ## Validação medida
 

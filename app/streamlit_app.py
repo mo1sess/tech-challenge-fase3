@@ -2,19 +2,27 @@
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 from typing import Any
 
 import streamlit as st
 
 from clinical_assistant.config import load_yaml, project_root
-from clinical_assistant.interface.application import create_clinical_application
+from clinical_assistant.interface.application import create_configured_clinical_application
 
 
 ROOT = project_root()
 CONFIG = load_yaml(ROOT / "configs" / "interface.yaml")
 APP_CONFIG = CONFIG["application"]
 UI_CONFIG = CONFIG["interface"]
+FULL_AGENT_CONFIG = load_yaml(ROOT / "configs" / "full_agent.yaml")
+EXECUTION_CONFIG = FULL_AGENT_CONFIG["execution"]
+EXECUTION_MODE = os.environ.get(
+    str(EXECUTION_CONFIG["mode_environment"]), str(EXECUTION_CONFIG["local_mode"])
+).strip()
+REMOTE_URL = os.environ.get(str(EXECUTION_CONFIG["remote_url_environment"]), "").strip()
+REMOTE_TOKEN = os.environ.get(str(EXECUTION_CONFIG["remote_token_environment"]), "").strip()
 
 st.set_page_config(
     page_title=APP_CONFIG["title"],
@@ -23,9 +31,14 @@ st.set_page_config(
 )
 
 
-@st.cache_resource(show_spinner=False)
-def load_application(root_value: str):
-    return create_clinical_application(Path(root_value))
+@st.cache_resource(show_spinner="Inicializando o fluxo clínico acadêmico...")
+def load_application(root_value: str, mode: str, remote_url: str, remote_token: str):
+    return create_configured_clinical_application(
+        Path(root_value),
+        mode=mode,
+        endpoint_url=remote_url,
+        token=remote_token,
+    )
 
 
 def render_sources(sources: list[str]) -> None:
@@ -151,22 +164,43 @@ def render_audit(application: Any) -> None:
 st.title(APP_CONFIG["title"])
 st.caption(APP_CONFIG["subtitle"])
 st.warning(APP_CONFIG["disclaimer"])
-st.info(
-    "Modo local: prévia determinística baseada nas evidências recuperadas. "
-    "O Qwen3-8B oficial não é carregado nesta GTX 1650."
-)
 
 try:
-    application = load_application(str(ROOT))
+    application = load_application(str(ROOT), EXECUTION_MODE, REMOTE_URL, REMOTE_TOKEN)
     patient_ids = application.list_patient_ids()
 except Exception as exc:
-    st.error(f"A aplicação local ainda não está pronta: {exc}")
-    st.code(
-        "& .\\.venv\\Scripts\\python.exe scripts\\build_patient_database.py\n"
-        "& .\\.venv\\Scripts\\python.exe scripts\\build_rag_index.py",
-        language="powershell",
-    )
+    st.error(f"A aplicação não pôde iniciar no modo {EXECUTION_MODE!r}: {exc}")
+    if EXECUTION_MODE == str(EXECUTION_CONFIG["local_mode"]):
+        st.code(
+            "& .\\.venv\\Scripts\\python.exe scripts\\build_patient_database.py\n"
+            "& .\\.venv\\Scripts\\python.exe scripts\\build_rag_index.py",
+            language="powershell",
+        )
+    else:
+        st.info(
+            "Confirme a URL HTTPS e o token exibidos pelo notebook Colab da Etapa 11.1. "
+            "O sistema não muda silenciosamente para o modo local."
+        )
     st.stop()
+
+profile = application.runtime_profile
+if profile.get("official_model_active"):
+    environment = profile.get("environment", {})
+    st.success(
+        "Modo oficial: Qwen3-8B + adapter QLoRA executado remotamente "
+        f"em {environment.get('gpu_name', 'GPU CUDA')} e integrado ao LangGraph."
+    )
+else:
+    st.info(
+        "Modo local: prévia determinística baseada nas evidências recuperadas. "
+        "O Qwen3-8B oficial não é carregado nesta GTX 1650."
+    )
+
+with st.sidebar:
+    st.subheader("Ambiente de execução")
+    st.write(f"Modo: `{profile.get('mode')}`")
+    st.write(f"Gerador: `{profile.get('generator')}`")
+    st.write(f"Modelo oficial ativo: {'sim' if profile.get('official_model_active') else 'não'}")
 
 if not patient_ids:
     st.error("Nenhum paciente pseudonimizado está disponível para seleção.")

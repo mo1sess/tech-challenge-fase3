@@ -2,8 +2,9 @@
 
 Fundação reproduzível de um protótipo acadêmico de apoio ao acompanhamento de
 pacientes com asma. O repositório está deliberadamente limitado às **ETAPAS 0
-a 11: fundação, dados, baseline, QLoRA, RAG, SQLite, LangChain, LangGraph,
-segurança, auditoria, avaliação comparativa e interface Streamlit**.
+a 11.1: fundação, dados, baseline, QLoRA, RAG, SQLite, LangChain, LangGraph,
+segurança, auditoria, avaliação comparativa, interface Streamlit e integração
+remota da LLM customizada**.
 
 > **Aviso:** Este sistema é um protótipo acadêmico e não deve ser utilizado para
 > diagnóstico, prescrição ou tomada autônoma de decisões clínicas.
@@ -34,6 +35,10 @@ segurança, auditoria, avaliação comparativa e interface Streamlit**.
   `outputs/evaluation/evaluation-20260915T010249Z`.
 - Implementado localmente: MVP Streamlit com seletor de paciente, consulta,
   fontes, exames pendentes, segurança, revisão humana e auditoria demonstrável.
+- Implementado e validado localmente: cliente LangChain para o Qwen3-8B remoto,
+  serviço GPU protegido por token, validação da identidade do modelo e do hash
+  do adapter, notebook Colab e modo explícito sem fallback silencioso. A
+  execução oficial ponta a ponta em GPU da ETAPA 11.1 permanece pendente.
 - Não implementado: pacote final de entrega da ETAPA 12.
 - Modelo oficial: `Qwen/Qwen3-8B`, sem substituição silenciosa.
 
@@ -334,14 +339,35 @@ exercita SQLite, RAG, LangChain, LangGraph, guardrails, human-in-the-loop e
 auditoria sem tentar carregar o Qwen3-8B na GTX 1650. Consulte
 `docs/stage_11_streamlit.md`.
 
+### Agente completo com Qwen3-8B remoto
+
+O notebook `notebooks/07_full_agent_colab.ipynb` inicia em uma Tesla T4 o
+Qwen3-8B fixado com o adapter QLoRA oficial da ETAPA 5, validado por SHA-256.
+Ele fornece uma URL HTTPS temporária e um token. Com o notebook em execução,
+inicie o Streamlit local no modo oficial:
+
+```powershell
+$env:TECHCARE_EXECUTION_MODE = "qwen_remote"
+$env:TECHCARE_REMOTE_URL = "URL_HTTPS_FORNECIDA_PELO_COLAB"
+$env:TECHCARE_REMOTE_TOKEN = "TOKEN_FORNECIDO_PELO_COLAB"
+& .\.venv\Scripts\python.exe -m streamlit run app\streamlit_app.py
+```
+
+Nesse modo, SQLite e RAG constroem o contexto localmente, o componente
+LangChain envia somente o contexto sintético ao Qwen remoto, e o LangGraph
+aplica safety, revisão humana e auditoria à resposta. Se o serviço estiver
+indisponível ou apresentar outro modelo/adapter, a aplicação falha de forma
+visível; ela não muda silenciosamente para a prévia local. Consulte
+`docs/stage_11_1_full_agent.md`.
+
 ## Testes
 
 ```powershell
 python -m pytest
 ```
 
-Os markers são `unit`, `integration`, `network` e `gpu`. Nesta entrega, os 116
-testes passaram em 65,10 segundos no Windows. Os testes locais não usam GPU;
+Os markers são `unit`, `integration`, `network` e `gpu`. Nesta entrega, os 122
+testes passaram em 57,85 segundos no Windows. Os testes locais não usam GPU;
 somente a instalação inicial do modelo de embeddings requer rede.
 
 ## Fontes
@@ -362,8 +388,9 @@ dos downloads antes de redistribuir os datasets.
   pode ser apresentado como protocolo real.
 - Resultados e quantidades só são documentados quando medidos por execução.
 
-## Próxima etapa (aguardando aprovação)
+## Próxima execução (aguardando GPU)
 
-A ETAPA 11 entrega a interface Streamlit local. A ETAPA 12 (relatório,
-diagramas e roteiro de demonstração) não será iniciada antes da aprovação da
-interface.
+A implementação local da ETAPA 11.1 está pronta. Falta executar o notebook em
+Tesla T4, conectar o Streamlit ao serviço oficial e preservar a evidência ponta
+a ponta. Somente depois dessa validação será iniciada a ETAPA 12 (relatório,
+diagramas, slides e roteiro de demonstração).

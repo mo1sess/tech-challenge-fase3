@@ -15,6 +15,9 @@ execution:
   generator: "deterministic_evidence_preview"
   official_model: "Qwen/Qwen3-8B"
   official_model_local_loading: false
+  official_remote_mode: "qwen_remote"
+  official_remote_generator: "qwen3_8b_qlora_remote"
+  silent_fallback_allowed: false
   maximum_question_chars: 1000
 
 interface:

@@ -1,0 +1,36 @@
+{
+  "errors": [],
+  "implementation": {
+    "colab_notebook": true,
+    "gpu_service": true,
+    "langchain_remote_generator": true,
+    "local_mode": "local_preview",
+    "official_mode": "qwen_remote",
+    "silent_fallback_allowed": false
+  },
+  "local_environment": {
+    "gpu_used": false,
+    "official_model_loaded": false
+  },
+  "model": {
+    "adapter_sha256": "d744bf09a8d7bbe1018ce48091429d82361f72f7c9e34e2a6f8f89d45e1855e3",
+    "id": "Qwen/Qwen3-8B",
+    "revision": "b968826d9c46dd6066d109eabc6255188de91218"
+  },
+  "official_gpu_execution": {
+    "minimum_vram_gb": 14,
+    "status": "pending_remote_execution"
+  },
+  "ok": true,
+  "required_files": {
+    "notebooks/07_full_agent_colab.ipynb": true,
+    "requirements/full-agent-gpu.txt": true,
+    "scripts/run_remote_agent_validation.py": true,
+    "scripts/serve_qwen_agent.py": true,
+    "scripts/validate_full_agent.py": true,
+    "src/clinical_assistant/finetuning/remote.py": true,
+    "src/clinical_assistant/finetuning/service.py": true
+  },
+  "stage": "11.1",
+  "validated_at_utc": "2026-09-15T11:28:05.621406+00:00"
+}

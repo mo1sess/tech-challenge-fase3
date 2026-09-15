@@ -57,6 +57,8 @@ def test_informational_query_produces_all_required_view_sections() -> None:
     )
     assert result["status"] == "completed"
     assert result["answer"]
+    assert "Fontes recuperadas:" not in result["answer"]
+    assert "Dados sintéticos para demonstração" not in result["answer"]
     assert result["sources"]
     assert len(result["pending_exams"]) == 1
     assert result["safety_label"] == "Consulta informativa"

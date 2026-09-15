@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 import uuid
-from dataclasses import dataclass
+import json
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
@@ -12,6 +13,7 @@ from langgraph.types import Command
 from clinical_assistant.audit.audit_logger import JsonlAuditLogger
 from clinical_assistant.config import load_yaml, resolve_project_path
 from clinical_assistant.database.patient_repository import PatientRepository
+from clinical_assistant.finetuning.remote import RemoteQwenResponseGenerator
 from clinical_assistant.graph.workflow import create_clinical_workflow
 
 
@@ -32,6 +34,22 @@ def _interrupt_payload(result: dict[str, Any]) -> dict[str, Any] | None:
 
 def _unique_strings(values: list[Any]) -> list[str]:
     return list(dict.fromkeys(str(value) for value in values if str(value).strip()))
+
+
+def _answer_for_interface(response: str) -> str:
+    """Remove blocks rendered separately by Streamlit without changing audit output."""
+
+    answer = response.strip()
+    sources_marker = "\n\nFontes recuperadas:\n"
+    if sources_marker in answer:
+        answer = answer.split(sources_marker, 1)[0].rstrip()
+    disclaimer = (
+        "Dados sintéticos para demonstração acadêmica. Não usar para diagnóstico, "
+        "prescrição ou decisão clínica autônoma."
+    )
+    if answer.endswith(disclaimer):
+        answer = answer[: -len(disclaimer)].rstrip()
+    return answer
 
 
 def present_workflow_result(
@@ -56,7 +74,7 @@ def present_workflow_result(
         "execution_id": str(result.get("execution_id", thread_id)),
         "patient_id": str(result.get("patient_id", "")),
         "question": str(result.get("question", "")),
-        "answer": str(result.get("final_response", "")),
+        "answer": _answer_for_interface(str(result.get("final_response", ""))),
         "draft": str((review or {}).get("draft", "")),
         "sources": _unique_strings(list(result.get("citations", []))),
         "pending_exams": list(result.get("pending_exams", [])),
@@ -83,6 +101,13 @@ class ClinicalApplication:
     graph: Any
     patient_repository: Any
     audit_logger: Any
+    runtime_profile: dict[str, Any] = field(
+        default_factory=lambda: {
+            "mode": "local_preview",
+            "generator": "deterministic_evidence_preview",
+            "official_model_active": False,
+        }
+    )
 
     def list_patient_ids(self) -> list[str]:
         values = self.patient_repository.list_patient_ids()
@@ -131,8 +156,13 @@ class ClinicalApplication:
         return {"integrity": integrity, "events": events}
 
 
-def create_clinical_application(root: Path) -> ClinicalApplication:
-    """Create the local CPU application without loading the official Qwen3-8B."""
+def create_clinical_application(
+    root: Path,
+    *,
+    generator: Any | None = None,
+    runtime_profile: dict[str, Any] | None = None,
+) -> ClinicalApplication:
+    """Create the application with an explicit generator or the local preview."""
 
     database_config = load_yaml(root / "configs" / "database.yaml")["database"]
     safety_config = load_yaml(root / "configs" / "safety.yaml")["audit"]
@@ -147,7 +177,65 @@ def create_clinical_application(root: Path) -> ClinicalApplication:
         maximum_events_to_read=int(safety_config["maximum_events_to_read"]),
     )
     return ClinicalApplication(
-        graph=create_clinical_workflow(root),
+        graph=create_clinical_workflow(root, generator=generator),
         patient_repository=repository,
         audit_logger=audit_logger,
+        runtime_profile=runtime_profile
+        or {
+            "mode": "local_preview",
+            "generator": "deterministic_evidence_preview",
+            "official_model_active": False,
+            "model_id": "Qwen/Qwen3-8B",
+        },
+    )
+
+
+def create_configured_clinical_application(
+    root: Path,
+    *,
+    mode: str,
+    endpoint_url: str = "",
+    token: str = "",
+) -> ClinicalApplication:
+    """Select local preview or the verified official remote generator."""
+
+    config = load_yaml(root / "configs" / "full_agent.yaml")
+    local_mode = str(config["execution"]["local_mode"])
+    official_mode = str(config["execution"]["official_mode"])
+    selected = mode.strip() or local_mode
+    if selected == local_mode:
+        return create_clinical_application(root)
+    if selected != official_mode:
+        raise ValueError(
+            f"Unsupported execution mode {selected!r}; use {local_mode!r} or {official_mode!r}"
+        )
+
+    manifest_path = resolve_project_path(config["model"]["adapter_manifest"], root=root)
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    expected_hash = str(
+        manifest["artifact_sha256"][str(config["model"]["adapter_artifact"])]
+    )
+    generator = RemoteQwenResponseGenerator(
+        endpoint_url=endpoint_url,
+        token=token,
+        timeout_seconds=float(config["execution"]["remote_timeout_seconds"]),
+        expected_model_id=str(config["model"]["id"]),
+        expected_revision=str(config["model"]["revision"]),
+        expected_adapter_sha256=expected_hash,
+    )
+    health = generator.health()
+    environment = dict(health.get("environment") or {})
+    return create_clinical_application(
+        root,
+        generator=generator,
+        runtime_profile={
+            "mode": official_mode,
+            "generator": generator.mode,
+            "official_model_active": True,
+            "model_id": config["model"]["id"],
+            "revision": config["model"]["revision"],
+            "adapter_sha256": expected_hash,
+            "endpoint_url": generator.endpoint_url,
+            "environment": environment,
+        },
     )

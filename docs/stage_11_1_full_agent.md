@@ -1,0 +1,118 @@
+# ETAPA 11.1 — Integração da LLM customizada
+
+## Status
+
+**Implementação e preflight locais concluídos. Execução oficial em GPU
+pendente.** Esta etapa fecha a lacuna entre o fluxo operacional da ETAPA 11 e o
+Qwen3-8B ajustado e avaliado nas ETAPAS 5 e 10.
+
+## Atendimento ao requisito acadêmico
+
+O assistente completo segue o fluxo:
+
+```text
+Streamlit
+  -> LangGraph
+  -> ferramentas LangChain (SQLite + RAG)
+  -> ContextBuilderChain
+  -> RemoteQwenResponseGenerator (LangChain Runnable)
+  -> Qwen3-8B + adapter QLoRA em GPU
+  -> safety check
+  -> human-in-the-loop quando necessário
+  -> auditoria e resposta com fontes
+```
+
+O modo `qwen_remote` é explícito. Se a URL, o token, a identidade do modelo, a
+revisão fixada ou o SHA-256 do adapter estiverem incorretos, a aplicação não
+inicia nesse modo. Não existe fallback silencioso para outro modelo.
+
+## Separação de ambientes
+
+### Windows local
+
+- Streamlit;
+- SQLite com prontuários sintéticos;
+- ChromaDB e retrieval;
+- ferramentas e contexto LangChain;
+- orquestração LangGraph;
+- guardrails, revisão humana e auditoria;
+- cliente HTTPS do gerador remoto.
+
+### Google Colab com Tesla T4
+
+- Qwen/Qwen3-8B na revisão fixada;
+- quantização NF4 em 4 bits;
+- adapter QLoRA final da ETAPA 5;
+- serviço FastAPI protegido por bearer token;
+- túnel HTTPS temporário usado somente durante a demonstração.
+
+A GTX 1650 de 4 GB é bloqueada antes do carregamento. O preflight exige uma GPU
+remota com pelo menos 14 GB de VRAM.
+
+## Integridade do modelo
+
+O serviço verifica `adapter_model.safetensors` contra o SHA-256 registrado no
+manifesto oficial da ETAPA 5:
+
+```text
+d744bf09a8d7bbe1018ce48091429d82361f72f7c9e34e2a6f8f89d45e1855e3
+```
+
+O cliente valida em cada inicialização:
+
+- modelo `Qwen/Qwen3-8B`;
+- revisão `b968826d9c46dd6066d109eabc6255188de91218`;
+- SHA-256 do adapter;
+- disponibilidade do serviço.
+
+## Execução
+
+1. Abra `notebooks/07_full_agent_colab.ipynb` no Google Colab.
+2. Selecione Python 3.12 e GPU Tesla T4.
+3. Coloque `qwen3_8b_qlora_stage5_evidence.zip` no Google Drive.
+4. Execute as células em ordem e copie a URL HTTPS e o token impressos.
+5. No PowerShell local, defina:
+
+```powershell
+$env:TECHCARE_EXECUTION_MODE = "qwen_remote"
+$env:TECHCARE_REMOTE_URL = "URL_HTTPS_FORNECIDA_PELO_COLAB"
+$env:TECHCARE_REMOTE_TOKEN = "TOKEN_FORNECIDO_PELO_COLAB"
+& .\.venv\Scripts\python.exe -m streamlit run app\streamlit_app.py
+```
+
+6. Em outro PowerShell, com as mesmas variáveis, preserve a validação oficial:
+
+```powershell
+& .\.venv\Scripts\python.exe scripts\run_remote_agent_validation.py
+```
+
+O script executa consultas de condições, exames, protocolo, revisão humana e
+uma tentativa adversarial. As evidências são gravadas em
+`outputs/app/remote/remote-agent-*/` sem armazenar o token.
+
+## Validação local
+
+```powershell
+& .\.venv\Scripts\python.exe scripts\validate_full_agent.py
+& .\.venv\Scripts\python.exe -m pytest
+```
+
+O preflight local confirma o código, notebook, modelo, revisão e hash. Ele não
+declara que o Qwen foi executado: esse estado permanece
+`pending_remote_execution` até a execução real no Colab.
+
+O preflight retornou `ok: true`. A suíte completa terminou com 122 testes
+aprovados em 57,85 segundos e um aviso de depreciação futura do LangGraph, sem
+falha funcional. Um teste automatizado do Streamlit confirmou o modo local,
+consulta, resposta sem duplicação de fontes e ausência de exceções. Nenhuma GPU
+foi utilizada nesta validação local.
+
+## Limitações
+
+- todos os pacientes e protocolos são sintéticos;
+- a URL temporária existe somente enquanto o Colab e o túnel estiverem ativos;
+- o token não deve ser publicado, salvo em notebook público ou versionado;
+- a integração não comprova correção clínica;
+- a execução oficial requer GPU remota e download do modelo base;
+- métricas anteriores mostram que o fine-tuning e o RAG não superaram o
+  baseline na rubrica lexical utilizada.

@@ -174,3 +174,24 @@ O modo local é rotulado `deterministic_evidence_preview` e não carrega o
 Qwen3-8B na GTX 1650. A inferência oficial permanece comprovada pelas
 evidências remotas das ETAPAS 4, 5 e 10; a interface demonstra a integração e
 os controles sem substituir silenciosamente o modelo oficial.
+
+## ETAPA 11.1 — LLM customizada no fluxo operacional
+
+O ponto de extensão `ResponseGenerator` passa a aceitar também
+`RemoteQwenResponseGenerator`, implementado como um `RunnableLambda` do
+LangChain. O contexto mínimo continua sendo montado localmente a partir do
+SQLite e do RAG. Somente esse contexto sintético é enviado por HTTPS ao serviço
+GPU.
+
+O serviço remoto carrega a revisão fixada do Qwen3-8B em NF4 e o adapter QLoRA
+final. Antes de servir, confere o SHA-256 do adapter contra o manifesto da ETAPA
+5 e exige GPU com pelo menos 14 GB. A API usa bearer token e limita o tamanho do
+prompt. O cliente confirma modelo, revisão e hash; qualquer divergência encerra
+a inicialização sem fallback silencioso.
+
+```text
+Streamlit local -> LangGraph -> SQLite + RAG -> ContextBuilderChain
+                -> LangChain RemoteQwenResponseGenerator
+                -> HTTPS -> Qwen3-8B + QLoRA (Colab/T4)
+                -> safety -> human review -> audit -> resposta + fontes
+```

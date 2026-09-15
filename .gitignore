@@ -58,6 +58,9 @@ outputs/**
 !outputs/evaluation/**
 !outputs/app/
 !outputs/app/stage11_validation.json
+!outputs/app/stage11_1_preflight.json
+!outputs/app/remote/
+!outputs/app/remote/**
 
 # Runtime audit events may contain questions and patient pseudonyms.
 outputs/logs/
