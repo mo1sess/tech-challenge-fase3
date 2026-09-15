@@ -13,6 +13,7 @@ from clinical_assistant.config import load_yaml, resolve_project_path
 REQUIRED_FILES = (
     "src/clinical_assistant/finetuning/remote.py",
     "src/clinical_assistant/finetuning/service.py",
+    "src/clinical_assistant/graph/response_consistency.py",
     "scripts/serve_qwen_agent.py",
     "scripts/validate_full_agent.py",
     "scripts/run_remote_agent_validation.py",
@@ -67,6 +68,9 @@ def validate_full_agent_preflight(
                 "src/clinical_assistant/finetuning/remote.py"
             ],
             "gpu_service": files["src/clinical_assistant/finetuning/service.py"],
+            "structured_evidence_lock": files[
+                "src/clinical_assistant/graph/response_consistency.py"
+            ],
             "colab_notebook": files["notebooks/07_full_agent_colab.ipynb"],
             "silent_fallback_allowed": False,
         },

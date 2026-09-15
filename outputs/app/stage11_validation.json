@@ -45,9 +45,10 @@
     "pending_exams",
     "question_input",
     "safety_status",
-    "sources"
+    "sources",
+    "structured_evidence"
   ],
   "stage": 11,
   "streamlit": "1.46.1",
-  "validated_at_utc": "2026-09-15T01:43:03.436034+00:00"
+  "validated_at_utc": "2026-09-15T12:46:33.166080+00:00"
 }

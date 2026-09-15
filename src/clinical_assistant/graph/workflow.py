@@ -16,6 +16,7 @@ from clinical_assistant.chains.context_chain import ContextBuilderChain
 from clinical_assistant.config import load_yaml
 from clinical_assistant.audit.audit_logger import JsonlAuditLogger
 from clinical_assistant.database.patient_repository import validate_patient_id
+from clinical_assistant.graph.response_consistency import enforce_response_consistency
 from clinical_assistant.graph.state import ClinicalWorkflowState
 from clinical_assistant.rag.pipeline import open_protocol_retriever
 from clinical_assistant.safety.guardrails import SafetyGuardrails
@@ -279,9 +280,16 @@ class ClinicalWorkflow:
         }
 
     def generate_response(self, state: ClinicalWorkflowState) -> dict[str, Any]:
+        raw_response = self.generator.generate(state["prompt"], state)
+        response, consistency = enforce_response_consistency(raw_response, state)
+        generator_mode = self.generator.mode
+        if consistency["applied"]:
+            generator_mode += "+evidence_lock"
         return {
-            "llm_response": self.generator.generate(state["prompt"], state),
-            "generator_mode": self.generator.mode,
+            "raw_llm_response": raw_response,
+            "llm_response": response,
+            "response_consistency": consistency,
+            "generator_mode": generator_mode,
             "trace": ["generate_response"],
         }
 
@@ -399,6 +407,7 @@ class ClinicalWorkflow:
             "retrieved_documents": documents,
             "sources": state.get("citations", []),
             "model": state.get("generator_mode", "not_executed"),
+            "response_consistency": state.get("response_consistency", {}),
             "response": state["final_response"],
             "safety_result": state.get("safety_result", {}),
             "human_validation_required": state.get("requires_human_validation", False),

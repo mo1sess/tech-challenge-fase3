@@ -15,7 +15,9 @@ class ClinicalWorkflowState(TypedDict, total=False):
     citations: list[str]
     context: str
     prompt: str
+    raw_llm_response: str
     llm_response: str
+    response_consistency: dict[str, Any]
     input_safety_result: dict[str, Any]
     safety_result: dict[str, Any]
     requires_human_validation: bool

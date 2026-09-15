@@ -58,6 +58,23 @@ def render_pending_exams(exams: list[dict[str, Any]]) -> None:
         st.info("Nenhum exame pendente foi encontrado nos dados sintéticos.")
 
 
+def render_structured_evidence(result: dict[str, Any]) -> None:
+    records = result.get("structured_evidence", [])
+    kind = result.get("structured_evidence_kind", "")
+    if not records or kind == "pending_exams":
+        return
+    labels = {
+        "medications": "Medicamentos — evidência literal do SQLite",
+        "conditions": "Condições — evidência literal do SQLite",
+        "observations": "Observações — evidência literal do SQLite",
+    }
+    st.subheader(labels.get(kind, "Evidências estruturadas"))
+    st.dataframe(records, use_container_width=True, hide_index=True)
+    st.caption(
+        "Esta tabela é a fonte factual protegida; o modelo não pode alterar seus valores."
+    )
+
+
 def render_safety(result: dict[str, Any]) -> None:
     st.subheader("Status de segurança")
     safety = result.get("safety", {})
@@ -123,6 +140,7 @@ def render_result(result: dict[str, Any], application: Any) -> None:
         render_sources(result.get("sources", []))
     with exam_column:
         render_pending_exams(result.get("pending_exams", []))
+    render_structured_evidence(result)
     render_safety(result)
 
 

@@ -2,9 +2,10 @@
 
 ## Status
 
-**Implementação e preflight locais concluídos. Execução oficial em GPU
-pendente.** Esta etapa fecha a lacuna entre o fluxo operacional da ETAPA 11 e o
-Qwen3-8B ajustado e avaliado nas ETAPAS 5 e 10.
+**Implementação e preflight locais concluídos; integração remota confirmada por
+consulta manual.** A validação automatizada ponta a ponta ainda deve ser
+preservada. Esta etapa fecha a lacuna entre o fluxo operacional da ETAPA 11 e
+o Qwen3-8B ajustado e avaliado nas ETAPAS 5 e 10.
 
 ## Atendimento ao requisito acadêmico
 
@@ -17,6 +18,7 @@ Streamlit
   -> ContextBuilderChain
   -> RemoteQwenResponseGenerator (LangChain Runnable)
   -> Qwen3-8B + adapter QLoRA em GPU
+  -> trava de evidência factual estruturada
   -> safety check
   -> human-in-the-loop quando necessário
   -> auditoria e resposta com fontes
@@ -25,6 +27,26 @@ Streamlit
 O modo `qwen_remote` é explícito. Se a URL, o token, a identidade do modelo, a
 revisão fixada ou o SHA-256 do adapter estiverem incorretos, a aplicação não
 inicia nesse modo. Não existe fallback silencioso para outro modelo.
+
+## Consistência factual
+
+Uma consulta remota real mostrou que o adapter podia transformar
+`Meperidine Hydrochloride 50 MG Oral Tablet` em outro nome e associar um motivo
+inexistente. Outra geração retornou os marcadores `[CÓDIGO]` e `[DATA]`. Esses
+comportamentos são compatíveis com a limitação já medida na ETAPA 10: o
+fine-tuning não superou o modelo base na rubrica automática.
+
+A política `structured_patient_evidence_v1` agora protege consultas factuais
+sobre medicamentos, condições, observações e exames pendentes:
+
+- o Qwen remoto permanece no fluxo e sua saída bruta fica no estado interno;
+- a resposta liberada é reconstruída com valores literais do SQLite;
+- a interface mostra os registros estruturados usados;
+- placeholders não preenchidos nunca são liberados;
+- a decisão da política e o tipo de evidência são registrados na auditoria.
+
+Essa trava garante fidelidade dos campos estruturados consultados, mas não
+transforma texto generativo livre em informação clinicamente validada.
 
 ## Separação de ambientes
 
@@ -69,7 +91,7 @@ O cliente valida em cada inicialização:
 
 1. Abra `notebooks/07_full_agent_colab.ipynb` no Google Colab.
 2. Selecione Python 3.12 e GPU Tesla T4.
-3. Coloque `qwen3_8b_qlora_stage5_evidence.zip` no Google Drive.
+3. Coloque `qwen3_8b_qlora_adapter_only.zip` no Google Drive.
 4. Execute as células em ordem e copie a URL HTTPS e o token impressos.
 5. No PowerShell local, defina:
 
@@ -101,8 +123,8 @@ O preflight local confirma o código, notebook, modelo, revisão e hash. Ele nã
 declara que o Qwen foi executado: esse estado permanece
 `pending_remote_execution` até a execução real no Colab.
 
-O preflight retornou `ok: true`. A suíte completa terminou com 122 testes
-aprovados em 57,85 segundos e um aviso de depreciação futura do LangGraph, sem
+O preflight retornou `ok: true`. A suíte completa terminou com 130 testes
+aprovados em 26,46 segundos e um aviso de depreciação futura do LangGraph, sem
 falha funcional. Um teste automatizado do Streamlit confirmou o modo local,
 consulta, resposta sem duplicação de fontes e ausência de exceções. Nenhuma GPU
 foi utilizada nesta validação local.

@@ -6,7 +6,8 @@
     "langchain_remote_generator": true,
     "local_mode": "local_preview",
     "official_mode": "qwen_remote",
-    "silent_fallback_allowed": false
+    "silent_fallback_allowed": false,
+    "structured_evidence_lock": true
   },
   "local_environment": {
     "gpu_used": false,
@@ -29,8 +30,9 @@
     "scripts/serve_qwen_agent.py": true,
     "scripts/validate_full_agent.py": true,
     "src/clinical_assistant/finetuning/remote.py": true,
-    "src/clinical_assistant/finetuning/service.py": true
+    "src/clinical_assistant/finetuning/service.py": true,
+    "src/clinical_assistant/graph/response_consistency.py": true
   },
   "stage": "11.1",
-  "validated_at_utc": "2026-09-15T11:28:05.621406+00:00"
+  "validated_at_utc": "2026-09-15T12:44:45.550819+00:00"
 }

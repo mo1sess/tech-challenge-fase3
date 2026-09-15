@@ -102,6 +102,7 @@ def test_full_agent_preflight_is_reproducible() -> None:
         "d744bf09a8d7bbe1018ce48091429d82361f72f7c9e34e2a6f8f89d45e1855e3"
     )
     assert result["implementation"]["silent_fallback_allowed"] is False
+    assert result["implementation"]["structured_evidence_lock"] is True
     assert result["official_gpu_execution"]["status"] == "pending_remote_execution"
 
 

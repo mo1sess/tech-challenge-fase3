@@ -19,6 +19,7 @@ local. Consulte `docs/stage_11_1_full_agent.md`.
 - seletor com pacientes pseudonimizados;
 - campo de pergunta e botão `Consultar`;
 - resposta ou rascunho retido;
+- tabela de evidência literal para consultas factuais;
 - fontes recuperadas;
 - exames pendentes;
 - status de segurança;
@@ -43,6 +44,11 @@ Consultas clínicas continuam passando pelos guardrails. Solicitações de
 prescrição, dose, diagnóstico ou alteração de conduta são bloqueadas ou
 interrompidas para revisão. A aprovação da interface demonstra o mecanismo e
 não representa validação profissional real.
+
+No modo remoto, uma trava adicional substitui a prosa do modelo por uma
+resposta construída diretamente do SQLite quando a pergunta solicita
+medicamentos, condições, observações ou exames pendentes. Isso impede que nomes,
+códigos, valores, unidades e datas sejam traduzidos ou inventados pelo modelo.
 
 ## Execução
 
@@ -82,6 +88,6 @@ exceções. Uma consulta informativa exibiu resposta, fontes, pendências e
 auditoria; uma consulta sobre alteração de medicamento interrompeu o grafo e
 foi retomada com rejeição, mantendo a resposta retida.
 
-A suíte completa terminou com 116 testes aprovados em 40,25 segundos e um
+A suíte completa terminou com 130 testes aprovados em 26,46 segundos e um
 aviso de depreciação futura do LangGraph, sem falha funcional. Nenhuma GPU foi
 utilizada.

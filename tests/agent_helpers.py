@@ -119,7 +119,7 @@ SAFETY_CONFIG = {
 }
 
 
-def create_test_workflow(*, max_context_chars: int = 12000):
+def create_test_workflow(*, max_context_chars: int = 12000, generator=None):
     patient_tools = FakePatientTools(calls=[], audit_events=[])
     toolbox = create_langchain_toolbox(
         patient_tools,
@@ -130,7 +130,7 @@ def create_test_workflow(*, max_context_chars: int = 12000):
     workflow = ClinicalWorkflow(
         toolbox=toolbox,
         context_chain=ContextBuilderChain(max_context_chars=max_context_chars),
-        generator=DeterministicEvidencePreview(),
+        generator=generator or DeterministicEvidencePreview(),
         max_question_chars=1000,
         review_terms=[
             "tratamento",

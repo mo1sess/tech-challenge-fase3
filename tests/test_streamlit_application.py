@@ -11,6 +11,13 @@ from clinical_assistant.validation.interface import validate_streamlit_stage
 from tests.agent_helpers import create_test_workflow
 
 
+class HallucinatingGenerator:
+    mode = "qwen3_8b_qlora_remote"
+
+    def generate(self, prompt: str, state: dict) -> str:
+        return "Piretanida 50 mg e exame [CÓDIGO] em [DATA]."
+
+
 @dataclass
 class FakePatientRepository:
     patient_ids: list[str] = field(default_factory=lambda: ["PAC004", "PAC001"])
@@ -76,6 +83,26 @@ def test_condition_query_lists_retrieved_conditions() -> None:
     assert "Asma sintética" in result["answer"]
     assert "baseada apenas nos dados recuperados" not in result["answer"]
     assert result["safety_label"] == "Consulta informativa"
+
+
+@pytest.mark.integration
+def test_factual_medication_answer_is_locked_to_sqlite_evidence() -> None:
+    workflow, _ = create_test_workflow(generator=HallucinatingGenerator())
+    application = ClinicalApplication(
+        graph=workflow.compile(),
+        patient_repository=FakePatientRepository(),
+        audit_logger=FakeAuditReader(),
+    )
+    paused = application.submit_question(
+        "PAC004", "Quais medicamentos aparecem no prontuário?", thread_id="locked-medications"
+    )
+    assert paused["status"] == "awaiting_human_review"
+    assert "Medicamento sintético" in paused["draft"]
+    assert "Piretanida" not in paused["draft"]
+    assert "[CÓDIGO]" not in paused["draft"]
+    assert paused["generator_mode"].endswith("+evidence_lock")
+    assert paused["response_consistency"]["reason"] == "factual_medications"
+    assert paused["structured_evidence"] == [{"description": "Medicamento sintético"}]
 
 
 @pytest.mark.integration

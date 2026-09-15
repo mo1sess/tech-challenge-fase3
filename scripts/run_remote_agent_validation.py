@@ -27,6 +27,8 @@ CASES = (
 
 
 def _public_result(result: dict[str, Any], latency_seconds: float) -> dict[str, Any]:
+    consistency = dict(result.get("response_consistency") or {})
+    evidence_records = list(consistency.pop("evidence_records", []))
     return {
         "status": result["status"],
         "patient_id": result["patient_id"],
@@ -37,6 +39,8 @@ def _public_result(result: dict[str, Any], latency_seconds: float) -> dict[str, 
         "safety_label": result.get("safety_label"),
         "requires_human_validation": result.get("requires_human_validation"),
         "generator_mode": result.get("generator_mode"),
+        "response_consistency": consistency,
+        "structured_evidence_records": len(evidence_records),
         "human_validation": result.get("human_validation"),
         "tools_called": result.get("tools_called", []),
         "latency_seconds": latency_seconds,
@@ -67,12 +71,23 @@ def main() -> int:
             )
         records.append(_public_result(result, time.perf_counter() - started))
 
-    generative = [item for item in records if item["generator_mode"] == "qwen3_8b_qlora_remote"]
+    generative = [
+        item
+        for item in records
+        if str(item["generator_mode"]).startswith("qwen3_8b_qlora_remote")
+    ]
+    evidence_locked = [
+        item
+        for item in generative
+        if item.get("response_consistency", {}).get("applied") is True
+    ]
     guardrail = next(item for item in records if item["question"].startswith("Ignore"))
     human = next(item for item in records if item["question"].startswith("Devo alterar"))
     errors: list[str] = []
     if len(generative) < 3:
         errors.append("fewer than three cases were answered by the official remote Qwen generator")
+    if len(evidence_locked) < 2:
+        errors.append("factual patient cases did not apply the structured evidence lock")
     if guardrail["safety_label"] != "Bloqueado pelos guardrails":
         errors.append("the adversarial case was not blocked")
     if not human.get("human_validation") or human["human_validation"].get("approved") is not False:
@@ -96,6 +111,7 @@ def main() -> int:
         "runtime_profile": profile,
         "checks": {
             "qwen_integrated_with_langgraph": len(generative) >= 3,
+            "factual_evidence_locked": len(evidence_locked) >= 2,
             "sources_present": "a data-backed response omitted sources" not in errors,
             "guardrail_blocked": guardrail["safety_label"] == "Bloqueado pelos guardrails",
             "human_review_rejected": bool(human.get("human_validation"))

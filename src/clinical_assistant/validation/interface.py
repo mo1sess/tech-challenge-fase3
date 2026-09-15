@@ -19,6 +19,7 @@ REQUIRED_SECTIONS = {
     "answer",
     "sources",
     "pending_exams",
+    "structured_evidence",
     "safety_status",
     "human_validation",
     "audit",

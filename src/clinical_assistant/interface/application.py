@@ -60,6 +60,7 @@ def present_workflow_result(
     review = _interrupt_payload(result)
     safety = dict(result.get("safety_result") or {})
     waiting = review is not None
+    consistency = dict(result.get("response_consistency") or {})
     status = "awaiting_human_review" if waiting else "completed"
     if safety.get("blocked"):
         safety_label = STATUS_LABELS["blocked"]
@@ -87,6 +88,9 @@ def present_workflow_result(
         "human_validation": result.get("human_validation"),
         "review_request": review,
         "generator_mode": str(result.get("generator_mode", "not_executed")),
+        "response_consistency": consistency,
+        "structured_evidence_kind": str(consistency.get("evidence_kind", "")),
+        "structured_evidence": list(consistency.get("evidence_records", [])),
         "tools_called": list(result.get("selected_tools", [])),
         "limitations": _unique_strings(list(result.get("limitations", []))),
         "audit_result": dict(result.get("audit_result") or {}),

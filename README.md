@@ -360,14 +360,22 @@ indisponível ou apresentar outro modelo/adapter, a aplicação falha de forma
 visível; ela não muda silenciosamente para a prévia local. Consulte
 `docs/stage_11_1_full_agent.md`.
 
+Consultas factuais sobre medicamentos, condições, observações e exames
+pendentes passam adicionalmente pela política
+`structured_patient_evidence_v1`. O Qwen continua integrado ao fluxo, mas os
+nomes, códigos, valores, unidades e datas liberados ao usuário são montados
+diretamente dos registros SQLite. Respostas generativas com marcadores não
+preenchidos, como `[CÓDIGO]` ou `[DATA]`, são descartadas. A interface exibe a
+tabela factual protegida usada na resposta.
+
 ## Testes
 
 ```powershell
 python -m pytest
 ```
 
-Os markers são `unit`, `integration`, `network` e `gpu`. Nesta entrega, os 122
-testes passaram em 57,85 segundos no Windows. Os testes locais não usam GPU;
+Os markers são `unit`, `integration`, `network` e `gpu`. Nesta entrega, os 130
+testes passaram em 26,46 segundos no Windows. Os testes locais não usam GPU;
 somente a instalação inicial do modelo de embeddings requer rede.
 
 ## Fontes
@@ -388,9 +396,12 @@ dos downloads antes de redistribuir os datasets.
   pode ser apresentado como protocolo real.
 - Resultados e quantidades só são documentados quando medidos por execução.
 
-## Próxima execução (aguardando GPU)
+## Próxima execução
 
-A implementação local da ETAPA 11.1 está pronta. Falta executar o notebook em
-Tesla T4, conectar o Streamlit ao serviço oficial e preservar a evidência ponta
-a ponta. Somente depois dessa validação será iniciada a ETAPA 12 (relatório,
-diagramas, slides e roteiro de demonstração).
+A implementação local da ETAPA 11.1 está pronta e uma consulta manual já
+confirmou o caminho Streamlit -> LangGraph -> Qwen3-8B + QLoRA em Tesla T4. A
+observação também motivou a trava de evidência factual descrita acima. Falta
+executar `scripts/run_remote_agent_validation.py` com o serviço ativo e
+preservar o relatório automatizado sem credenciais. Depois dessa validação,
+pode ser iniciada a ETAPA 12 (relatório, diagramas, slides e roteiro de
+demonstração).
