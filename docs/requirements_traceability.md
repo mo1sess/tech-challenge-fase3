@@ -4,7 +4,7 @@ Fonte: `docs/references/8IADT - Fase 3 - Tech challenge.pdf`.
 
 | Requisito do PDF | Implementação | Evidência principal |
 |---|---|---|
-| Fine-tuning de LLM | QLoRA 4-bit do Qwen3-8B | `scripts/train_qlora.py`, `notebooks/05_finetuning.ipynb`, `docs/stage_5_qlora.md` |
+| Fine-tuning de LLM | QLoRA 4-bit do Qwen3-8B | `scripts/train_qlora.py`, `notebooks/05_finetuning.ipynb`, `docs/stage_5_qlora.md`, [adapter publicado](https://github.com/mo1sess/tech-challenge-fase3/releases/tag/stage5-qlora-adapter-v1) |
 | Protocolos, FAQ, laudos, receitas e procedimentos | Catálogo sintético versionado e identificado | `data/synthetic/hospital/`, `src/clinical_assistant/synthetic/` |
 | Preprocessing, anonimização e curadoria | Limpeza, mascaramento, anonimização relacional e deduplicação | `src/clinical_assistant/preprocessing/`, `docs/dataset.md` |
 | Pipeline LangChain com LLM customizada | Context builder e gerador remoto Qwen | `src/clinical_assistant/chains/context_chain.py`, `src/clinical_assistant/finetuning/remote.py` |
@@ -27,7 +27,9 @@ Fonte: `docs/references/8IADT - Fase 3 - Tech challenge.pdf`.
 Os requisitos técnicos possuem implementação e evidências versionadas. Antes da
 entrega final, ainda devem ser anexados ou publicados:
 
-1. o adapter QLoRA como artefato separado, acompanhado de seu SHA-256;
-2. a validação automatizada ponta a ponta gerada por
+1. a validação automatizada ponta a ponta gerada por
    `scripts/run_remote_agent_validation.py`;
-3. o vídeo de demonstração com até 15 minutos.
+2. o vídeo de demonstração com até 15 minutos.
+
+O adapter QLoRA já está publicado como Release separado e verificável, com os
+hashes do ZIP e do arquivo `adapter_model.safetensors` documentados.

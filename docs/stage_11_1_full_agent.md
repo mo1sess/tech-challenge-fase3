@@ -91,7 +91,9 @@ O cliente valida em cada inicialização:
 
 1. Abra `notebooks/07_full_agent_colab.ipynb` no Google Colab.
 2. Selecione Python 3.12 e GPU Tesla T4.
-3. Coloque `qwen3_8b_qlora_adapter_only.zip` no Google Drive.
+3. Baixe o adapter no
+   [Release oficial da ETAPA 5](https://github.com/mo1sess/tech-challenge-fase3/releases/tag/stage5-qlora-adapter-v1)
+   e coloque `qwen3_8b_qlora_adapter_only.zip` no Google Drive.
 4. Execute as células em ordem e copie a URL HTTPS e o token impressos.
 5. No PowerShell local, defina:
 

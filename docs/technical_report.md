@@ -93,8 +93,10 @@ está em `docs/evaluator_guide.md`.
 
 - pacientes e documentos internos são sintéticos;
 - o corpus RAG possui somente cinco documentos lógicos;
-- o adapter não é armazenado no repositório e deve ser distribuído como
-  artefato separado;
+- o adapter não é armazenado no histórico Git e está distribuído no
+  [Release oficial da ETAPA 5](https://github.com/mo1sess/tech-challenge-fase3/releases/tag/stage5-qlora-adapter-v1);
+  o ZIP oficial possui SHA-256
+  `8330716861f243ac22df56bb553a6cbe5067d1025f971289264f25abc6fb668e`;
 - o serviço Colab e seu túnel HTTPS são temporários;
 - não há autenticação, autorização ou garantias de disponibilidade de produção;
 - a demonstração não autoriza diagnóstico, prescrição ou decisão clínica.
@@ -104,7 +106,6 @@ está em `docs/evaluator_guide.md`.
 O projeto atende tecnicamente ao pipeline de fine-tuning, integração LangChain,
 fluxos LangGraph, dados estruturados, segurança, auditoria e indicação de
 fontes. A evidência medida também registra resultados negativos do ajuste sem
-ocultá-los. Para finalizar a entrega, devem ser disponibilizados o adapter como
-artefato verificável, a validação remota automatizada e o vídeo de até 15
-minutos exigido pelo PDF.
-
+ocultá-los. O adapter já está publicado como artefato verificável. Para
+finalizar a entrega, ainda devem ser preservadas a validação remota automatizada
+e o vídeo de até 15 minutos exigido pelo PDF.

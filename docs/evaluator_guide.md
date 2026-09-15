@@ -103,16 +103,23 @@ segurança e a necessidade de validação humana devem permanecer visíveis.
 - `qwen3_8b_qlora_adapter_only.zip` íntegro;
 - sessão remota mantida ativa durante o teste.
 
-O adapter não é armazenado no Git por causa do tamanho. O responsável pela
-entrega deve disponibilizá-lo como artefato separado e manter o SHA-256
-documentado no projeto. O SHA-256 esperado do arquivo
+O adapter não é armazenado no histórico Git por causa do tamanho. Ele está
+disponível no
+[Release oficial da ETAPA 5](https://github.com/mo1sess/tech-challenge-fase3/releases/tag/stage5-qlora-adapter-v1).
+O SHA-256 esperado do arquivo
 `adapter/adapter_model.safetensors` é
 `d744bf09a8d7bbe1018ce48091429d82361f72f7c9e34e2a6f8f89d45e1855e3`.
+O SHA-256 do arquivo `qwen3_8b_qlora_adapter_only.zip` distribuído é
+`8330716861f243ac22df56bb553a6cbe5067d1025f971289264f25abc6fb668e`;
+o mesmo valor está versionado em
+`artifacts/qwen3_8b_qlora_adapter_only.zip.sha256`.
 
 1. Abra o
    [notebook do agente completo no Colab](https://colab.research.google.com/github/mo1sess/tech-challenge-fase3/blob/main/notebooks/07_full_agent_colab.ipynb).
 2. Selecione Python 3.12 e uma GPU compatível.
-3. Coloque `qwen3_8b_qlora_adapter_only.zip` em
+3. Baixe o
+   [`qwen3_8b_qlora_adapter_only.zip`](https://github.com/mo1sess/tech-challenge-fase3/releases/download/stage5-qlora-adapter-v1/qwen3_8b_qlora_adapter_only.zip),
+   coloque-o em
    `/content/drive/MyDrive/qwen3_8b_qlora_adapter_only.zip` e aguarde o upload
    chegar a 100%.
 4. Execute as células em ordem. O notebook valida o ZIP e o SHA-256 do adapter.

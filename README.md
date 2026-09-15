@@ -38,10 +38,15 @@ um túnel encerrado. O procedimento manual e a solução de problemas estão no
 
 O teste com a LLM oficial requer também o adapter da ETAPA 5, que não é
 versionado por causa do tamanho. O arquivo
-`qwen3_8b_qlora_adapter_only.zip` deve acompanhar o pacote de avaliação ou ser
-obtido pelo link de artefato informado na entrega. Consulte o
+[`qwen3_8b_qlora_adapter_only.zip`](https://github.com/mo1sess/tech-challenge-fase3/releases/download/stage5-qlora-adapter-v1/qwen3_8b_qlora_adapter_only.zip)
+está publicado no Release `stage5-qlora-adapter-v1`. Consulte o
 [guia do avaliador](docs/evaluator_guide.md) para executar o notebook Colab,
 conectar o Streamlit e resolver erros comuns.
+
+O ZIP oficial possui SHA-256
+`8330716861f243ac22df56bb553a6cbe5067d1025f971289264f25abc6fb668e`.
+O checksum também está disponível em
+[`artifacts/qwen3_8b_qlora_adapter_only.zip.sha256`](artifacts/qwen3_8b_qlora_adapter_only.zip.sha256).
 
 A correspondência entre cada item do PDF e os arquivos de implementação está
 em [rastreabilidade dos requisitos](docs/requirements_traceability.md). O
@@ -80,8 +85,10 @@ demonstração de até 15 minutos.
   serviço GPU protegido por token, validação da identidade do modelo e do hash
   do adapter, notebook Colab e modo explícito sem fallback silencioso. A
   execução oficial ponta a ponta em GPU da ETAPA 11.1 permanece pendente.
-- Pendências externas à implementação: publicar o adapter verificável, preservar
-  a validação remota automatizada e adicionar o link do vídeo de demonstração.
+- Adapter verificável publicado como GitHub Release, com hashes do ZIP e do
+  `adapter_model.safetensors` documentados.
+- Pendências externas à implementação: preservar a validação remota automatizada
+  e adicionar o link do vídeo de demonstração.
 - Modelo oficial: `Qwen/Qwen3-8B`, sem substituição silenciosa.
 
 ## Ambientes de referência
@@ -445,7 +452,7 @@ dos downloads antes de redistribuir os datasets.
 - [x] código modular, dados sintéticos, fine-tuning, LangChain e LangGraph;
 - [x] Streamlit, segurança, revisão humana, fontes e auditoria;
 - [x] avaliação comparativa, relatório técnico e diagrama do fluxo;
-- [ ] publicar o adapter QLoRA como artefato separado e verificável;
+- [x] adapter QLoRA publicado como artefato separado e verificável;
 - [ ] executar `scripts/run_remote_agent_validation.py` com o serviço ativo e
   preservar o relatório sem credenciais;
 - [ ] gravar o vídeo de até 15 minutos e adicionar seu link ao README.
