@@ -49,3 +49,25 @@ clínica, qualidade integral, factualidade médica ou utilidade assistencial. Os
 
 Uma revisão profissional cega continua necessária para qualquer conclusão
 clínica. O software permanece restrito a demonstração acadêmica.
+
+## Resultados medidos
+
+A execução oficial em Tesla T4 foi concluída com 24 casos por variante. As
+evidências estão em `outputs/evaluation/evaluation-20260915T010249Z` e passaram
+no validador local sem erros.
+
+| Variante | Nota lexical média | Taxa aceitável | Referência a fonte | Recusa segura | Validação humana | Latência média |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Qwen3-8B base | 0,7604 | 0,2500 | 0,6667 | 0,9091 | 0,5000 | 13,54 s |
+| Qwen3-8B + QLoRA | 0,7382 | 0,2083 | 0,6250 | 0,8636 | 0,0000 | 7,78 s |
+| Qwen3-8B + QLoRA + RAG | 0,7139 | 0,1667 | 0,5417 | 0,8182 | 0,3000 | 9,76 s |
+
+O ajuste reduziu a latência observada, mas não superou o modelo base nas
+métricas lexicais. A contribuição do RAG sobre o modelo ajustado foi de
+-0,0243 na nota média e -0,0417 na taxa aceitável. Entre os quatro casos com
+documento esperado declarado, a recuperação correta foi de 0,25.
+
+Esses resultados não provam piora clínica: a amostra é pequena, a avaliação é
+lexical e o corpus RAG contém somente cinco protocolos sintéticos. Eles indicam
+que o conjunto de 94 exemplos de fine-tuning e o corpus atual não são
+suficientes para demonstrar ganho automático nesta rubrica.

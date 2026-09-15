@@ -29,8 +29,9 @@ segurança, auditoria e avaliação comparativa**.
 - Implementado localmente: guardrails de entrada e saída, bloqueio antes do
   acesso aos dados, log JSONL append-only encadeado por SHA-256 e suíte
   adversarial reproduzível.
-- Preparado para GPU remota: comparação formal do modelo base, fine-tuned e
-  fine-tuned + RAG. Os resultados B/C aguardam execução real no Colab.
+- Concluído em GPU remota: comparação formal do modelo base, fine-tuned e
+  fine-tuned + RAG, com 24 casos por variante e evidências validadas em
+  `outputs/evaluation/evaluation-20260915T010249Z`.
 - Não implementado: Streamlit e pacote final de entrega.
 - Modelo oficial: `Qwen/Qwen3-8B`, sem substituição silenciosa.
 
@@ -279,10 +280,9 @@ O pré-flight local confirma os artefatos oficiais e não carrega a LLM:
 & .\.venv\Scripts\python.exe scripts\validate_model_evaluation.py
 ```
 
-A avaliação completa deve ser executada em Tesla T4 pelo notebook
-`notebooks/06_model_evaluation.ipynb`. Faça upload do ZIP de evidências da
-ETAPA 5 quando solicitado. O runner verifica o hash do adapter antes de gerar
-qualquer resposta.
+A avaliação completa foi executada em Tesla T4 pelo notebook
+`notebooks/06_model_evaluation.ipynb`. O runner confirmou o hash do adapter
+antes de gerar qualquer resposta.
 
 A mesma revisão do Qwen3-8B, os mesmos 24 casos reservados, as mesmas sementes
 e a mesma configuração de geração são usados em três variantes:
@@ -291,17 +291,18 @@ e a mesma configuração de geração são usados em três variantes:
 2. Qwen3-8B com adapter QLoRA;
 3. Qwen3-8B com adapter QLoRA e os cinco protocolos do RAG.
 
-O notebook executa primeiro um smoke test e depois 48 gerações oficiais, salva
-respostas e hashes, calcula métricas e produz `comparison.md`. Depois de baixar
-e importar o ZIP, valide-o localmente com:
+O notebook executou primeiro um smoke test e depois 48 gerações oficiais,
+salvou respostas e hashes, calculou métricas e produziu `comparison.md`. A
+evidência importada foi validada localmente com:
 
 ```powershell
-& .\.venv\Scripts\python.exe scripts\validate_model_evaluation.py --run outputs\evaluation\evaluation-AAAAMMDDTHHMMSSZ
+& .\.venv\Scripts\python.exe scripts\validate_model_evaluation.py --run outputs\evaluation\evaluation-20260915T010249Z
 ```
 
-O pré-flight não é um resultado comparativo. Nenhuma métrica das variantes
-ajustadas deve ser declarada antes da execução real. Consulte
-`docs/evaluation.md` e `docs/stage_10_evaluation.md`.
+O modelo base obteve nota lexical média 0,7604; o QLoRA, 0,7382; e o QLoRA com
+RAG, 0,7139. O RAG recuperou o documento esperado em 25% dos quatro casos com
+expectativa objetiva. As métricas são lexicais e não estabelecem correção
+clínica. Consulte `docs/evaluation.md` e `docs/stage_10_evaluation.md`.
 
 ## Testes
 
