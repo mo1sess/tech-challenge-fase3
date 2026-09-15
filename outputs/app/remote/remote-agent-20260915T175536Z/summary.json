@@ -1,0 +1,39 @@
+{
+  "cases": 5,
+  "checks": {
+    "factual_evidence_locked": true,
+    "guardrail_blocked": true,
+    "human_review_rejected": true,
+    "qwen_integrated_with_langgraph": true,
+    "sources_present": true
+  },
+  "complete": true,
+  "errors": [],
+  "generated_at_utc": "2026-09-15T17:55:36.687794+00:00",
+  "latency_seconds": {
+    "maximum": 23.30031169999711,
+    "mean": 12.045573719998355
+  },
+  "limitations": [
+    "All patient records and internal protocols are synthetic.",
+    "This execution demonstrates integration and does not establish clinical correctness.",
+    "The temporary GPU endpoint is intended only for the controlled academic demonstration."
+  ],
+  "official_generator_cases": 4,
+  "run_type": "official_remote_agent_validation",
+  "runtime_profile": {
+    "adapter_sha256": "d744bf09a8d7bbe1018ce48091429d82361f72f7c9e34e2a6f8f89d45e1855e3",
+    "environment": {
+      "compute_capability": "7.5",
+      "cuda_runtime": "12.8",
+      "gpu_name": "Tesla T4",
+      "gpu_vram_gb": 14.56317138671875
+    },
+    "generator": "qwen3_8b_qlora_remote",
+    "mode": "qwen_remote",
+    "model_id": "Qwen/Qwen3-8B",
+    "official_model_active": true,
+    "revision": "b968826d9c46dd6066d109eabc6255188de91218"
+  },
+  "stage": "11.1"
+}

@@ -25,11 +25,10 @@ Fonte: `docs/references/8IADT - Fase 3 - Tech challenge.pdf`.
 ## Situação de entrega
 
 Os requisitos técnicos possuem implementação e evidências versionadas. Antes da
-entrega final, ainda devem ser anexados ou publicados:
-
-1. a validação automatizada ponta a ponta gerada por
-   `scripts/run_remote_agent_validation.py`;
-2. o vídeo de demonstração com até 15 minutos.
+entrega final, ainda deve ser publicado o vídeo de demonstração com até 15
+minutos.
 
 O adapter QLoRA já está publicado como Release separado e verificável, com os
 hashes do ZIP e do arquivo `adapter_model.safetensors` documentados.
+A validação automatizada ponta a ponta está preservada em
+`outputs/app/remote/remote-agent-20260915T175536Z`.

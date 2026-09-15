@@ -83,12 +83,14 @@ demonstração de até 15 minutos.
   fontes, exames pendentes, segurança, revisão humana e auditoria demonstrável.
 - Implementado e validado localmente: cliente LangChain para o Qwen3-8B remoto,
   serviço GPU protegido por token, validação da identidade do modelo e do hash
-  do adapter, notebook Colab e modo explícito sem fallback silencioso. A
-  execução oficial ponta a ponta em GPU da ETAPA 11.1 permanece pendente.
+  do adapter, notebook Colab e modo explícito sem fallback silencioso.
+- Concluído em GPU remota: validação oficial ponta a ponta da ETAPA 11.1, com
+  cinco casos, quatro gerações pelo Qwen3-8B + QLoRA, evidência factual
+  protegida, fontes, guardrail e revisão humana. Evidências em
+  `outputs/app/remote/remote-agent-20260915T175536Z`.
 - Adapter verificável publicado como GitHub Release, com hashes do ZIP e do
   `adapter_model.safetensors` documentados.
-- Pendências externas à implementação: preservar a validação remota automatizada
-  e adicionar o link do vídeo de demonstração.
+- Pendência externa à implementação: adicionar o link do vídeo de demonstração.
 - Modelo oficial: `Qwen/Qwen3-8B`, sem substituição silenciosa.
 
 ## Ambientes de referência
@@ -453,6 +455,5 @@ dos downloads antes de redistribuir os datasets.
 - [x] Streamlit, segurança, revisão humana, fontes e auditoria;
 - [x] avaliação comparativa, relatório técnico e diagrama do fluxo;
 - [x] adapter QLoRA publicado como artefato separado e verificável;
-- [ ] executar `scripts/run_remote_agent_validation.py` com o serviço ativo e
-  preservar o relatório sem credenciais;
+- [x] validação remota oficial executada e relatório preservado sem credenciais;
 - [ ] gravar o vídeo de até 15 minutos e adicionar seu link ao README.

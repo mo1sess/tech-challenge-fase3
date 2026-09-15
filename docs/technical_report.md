@@ -57,6 +57,11 @@ No modo local, a aplicação executa a mesma orquestração sem carregar a LLM e
 identifica a saída como prévia determinística. Essa separação permite avaliar
 as camadas locais sem representar que uma LLM foi executada.
 
+A validação oficial ponta a ponta executou cinco casos em Tesla T4, incluindo
+quatro gerações pelo Qwen3-8B + QLoRA. Integração LangGraph, evidência factual,
+fontes, guardrail e revisão humana foram confirmados sem erros. A evidência está
+em `outputs/app/remote/remote-agent-20260915T175536Z`.
+
 ## Segurança, validação e explainability
 
 Guardrails determinísticos bloqueiam instruções para ignorar regras, prescrever
@@ -106,6 +111,6 @@ está em `docs/evaluator_guide.md`.
 O projeto atende tecnicamente ao pipeline de fine-tuning, integração LangChain,
 fluxos LangGraph, dados estruturados, segurança, auditoria e indicação de
 fontes. A evidência medida também registra resultados negativos do ajuste sem
-ocultá-los. O adapter já está publicado como artefato verificável. Para
-finalizar a entrega, ainda devem ser preservadas a validação remota automatizada
-e o vídeo de até 15 minutos exigido pelo PDF.
+ocultá-los. O adapter está publicado como artefato verificável e a validação
+remota automatizada está preservada. Para finalizar a entrega, resta publicar o
+vídeo de até 15 minutos exigido pelo PDF.

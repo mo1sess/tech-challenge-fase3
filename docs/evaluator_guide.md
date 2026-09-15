@@ -142,6 +142,11 @@ $env:TECHCARE_REMOTE_TOKEN = "TOKEN_FORNECIDO_PELO_COLAB"
 O modo oficial deve aparecer em verde na interface. O Colab e o túnel HTTPS
 precisam continuar ativos durante toda a demonstração.
 
+Uma execução oficial completa foi preservada em
+`outputs/app/remote/remote-agent-20260915T175536Z`. O relatório confirma cinco
+casos, quatro gerações pelo Qwen3-8B + QLoRA e todas as verificações de
+integração, evidência factual, fontes, guardrail e revisão humana aprovadas.
+
 ## Solução de problemas
 
 ### `ModuleNotFoundError: clinical_assistant`

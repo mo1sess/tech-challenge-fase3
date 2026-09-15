@@ -2,10 +2,10 @@
 
 ## Status
 
-**Implementação e preflight locais concluídos; integração remota confirmada por
-consulta manual.** A validação automatizada ponta a ponta ainda deve ser
-preservada. Esta etapa fecha a lacuna entre o fluxo operacional da ETAPA 11 e
-o Qwen3-8B ajustado e avaliado nas ETAPAS 5 e 10.
+**Concluída.** A implementação, o preflight local, a consulta manual e a
+validação automatizada ponta a ponta em GPU foram concluídos. Esta etapa fecha
+a lacuna entre o fluxo operacional da ETAPA 11 e o Qwen3-8B ajustado e avaliado
+nas ETAPAS 5 e 10.
 
 ## Atendimento ao requisito acadêmico
 
@@ -130,6 +130,17 @@ aprovados em 26,46 segundos e um aviso de depreciação futura do LangGraph, sem
 falha funcional. Um teste automatizado do Streamlit confirmou o modo local,
 consulta, resposta sem duplicação de fontes e ausência de exceções. Nenhuma GPU
 foi utilizada nesta validação local.
+
+## Validação oficial remota
+
+A execução `remote-agent-20260915T175536Z` completou cinco casos, dos quais
+quatro utilizaram o gerador oficial `qwen3_8b_qlora_remote`. O serviço confirmou
+Qwen3-8B na revisão fixada, adapter com o SHA-256 oficial e Tesla T4 com 14,56 GB
+de VRAM. As verificações de integração com LangGraph, trava de evidência factual,
+fontes, bloqueio adversarial e rejeição pela revisão humana retornaram `true`.
+A latência média foi 12,05 segundos, com máximo de 23,30 segundos e zero erros.
+Os arquivos estão em
+`outputs/app/remote/remote-agent-20260915T175536Z` e não armazenam URL nem token.
 
 ## Limitações
 
